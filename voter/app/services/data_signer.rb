@@ -1,23 +1,31 @@
 require 'openssl'
+require 'digest'
 
 class DataSigner
+  attr_reader :key
+
   def initialize(message: nil, private_key: nil)
     @private_key = private_key
     @message = message
   end
 
   def sign
-    signature = key.sign(OpenSSL::Digest::SHA256.new, @message)
-
-    {
-      private_key: key.to_s,
-      public_key: key.public_key.to_s
-      message: message,
-      signature: signature
-    }
+    salt, bit_commitment = generate_bit_commitment(message)
+    signed_message = sign_message(bit_commitment)
+    [salt, key, bit_commitment, signed_message]
   end
 
   private
+
+  def generate_bit_commitment(message)
+    salt = OpenSSL::Random.random_bytes(256)
+    bit_commitment = Digest::SHA256.hexdigest("#{salt}.#{message}")
+    [salt, bit_commitment]
+  end
+
+  def sign_message(message)
+    key.sign(OpenSSL::Digest::SHA256.new, message)
+  end
 
   def key
     @key ||= @private_key ? OpenSSL::PKey.read(@private_key) : generated_key
