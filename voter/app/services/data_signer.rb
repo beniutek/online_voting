@@ -2,7 +2,7 @@ require 'openssl'
 require 'digest'
 
 class DataSigner
-  attr_reader :key
+  attr_reader :key, :message
 
   def initialize(message: nil, private_key: nil)
     @private_key = private_key
