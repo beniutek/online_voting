@@ -1,0 +1,2 @@
+class VoteSigner
+end
