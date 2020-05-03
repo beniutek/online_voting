@@ -2,7 +2,8 @@ class VotesController < ApplicationController
   def sign
     binding.pry
     result = DataSigner.new(private_key: nil, message: message).sign
-    admin_response = AdminClient.new.get_admin_signature(voter_id, result[2], result[3])
+    key = result[1]
+    admin_response = AdminClient.new.get_admin_signature(voter_id, result[2], result[3], key.public_key)
     response = CounterClient.new.send_vote(result[2], admin_response[:signed_message])
     render json: response
   end

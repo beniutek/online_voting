@@ -1,7 +1,7 @@
 require 'rest_client'
 
 class AdminClient
-  def initialize(client = RestClient, uri = VoterApp.config.administrator_module_uri)
+  def initialize(client = RestClient, uri = Voter.config.administrator_module_uri)
     @client = client
     @uri = uri
   end
@@ -15,7 +15,7 @@ class AdminClient
     }
     headers = {}
     @client.post(@uri, values, headers)
-  rescue StandarError => e
+  rescue StandardError => e
     puts "some shenaningans happening while sending request to admin: "
     puts e.message
     puts "FIN"
