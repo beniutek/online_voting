@@ -14,7 +14,11 @@ require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
-
+Dir[
+  File.expand_path("lib/administrator.rb"),
+].each do |file|
+  require file
+end
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -23,13 +27,25 @@ module OnlineVoting
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
-
+    config.autoload_paths += %W(#{config.root}/lib)
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-
+    config.administrator = ActiveSupport::OrderedOptions.new
+    config.administrator.online_voting_secret = ENV['ONLINE_VOTING_SECRET']
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource(
+          '*',
+          headers: :any,
+          methods: [:get, :patch, :put, :delete, :post, :options]
+          )
+      end
+    end
   end
 end

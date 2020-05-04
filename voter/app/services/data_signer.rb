@@ -12,7 +12,8 @@ class DataSigner
   def sign
     salt, bit_commitment = generate_bit_commitment(message)
     signed_message = sign_message(bit_commitment)
-    [salt, key, bit_commitment, signed_message]
+    base64 = Base64.encode64(signed_message)
+    [salt, key, bit_commitment, base64]
   end
 
   private

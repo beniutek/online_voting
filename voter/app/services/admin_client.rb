@@ -8,10 +8,12 @@ class AdminClient
 
   def get_admin_signature(voter_id, bit_commitment, signed_message, public_key)
     values = {
-      voter_id: voter_id,
-      signed_message: signed_message,
-      bit_commitment: bit_commitment,
-      public_key: public_key,
+      data: {
+        voter_id: voter_id,
+        signature: signed_message,
+        message: bit_commitment,
+        public_key: public_key,
+      }
     }
     headers = {}
     @client.post(@uri, values, headers)
