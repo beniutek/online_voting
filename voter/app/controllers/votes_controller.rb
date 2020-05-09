@@ -15,15 +15,6 @@ class VotesController < ApplicationController
       puts " "
     end
 
-    puts "========="
-
-    orig = JSON.parse(admin_response)["data"]["original_message"]
-    decoded = Base64.decode64(orig)
-    puts "DECODED: "
-    puts decoded
-    puts "=="
-    puts decoded == result[:signed_message]
-    puts orig == result[:bit_commitment]
     render json: admin_response
   end
 
