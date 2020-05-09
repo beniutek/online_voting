@@ -1,6 +1,6 @@
 class VotersController < ApplicationController
   def sign
-    signature = VoteSigner.new(data: blinded_data_param, signature: signature_param, public_key: public_key_param).sign
+    signature = VoteSigner.new(data: blinded_data_param, signature: signature_param, public_key: public_key_param, voter_id: voter_id_param).sign
     response_json = {
       data: {
         voter_id: voter_id_param,
