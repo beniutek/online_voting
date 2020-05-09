@@ -4,8 +4,8 @@ class VotersController < ApplicationController
     response_json = {
       data: {
         voter_id: voter_id_param,
-        signature: signature,
-        message: blinded_data_param
+        admin_signature: Base64.encode64(signature),
+        original_message: blinded_data_param
       }
     }
 
@@ -17,7 +17,7 @@ class VotersController < ApplicationController
   end
 
   def signature_param
-    params[:data][:signature]
+    Base64.decode64(params[:data][:signature])
   end
 
   def public_key_param
