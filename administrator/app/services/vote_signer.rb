@@ -10,9 +10,15 @@ class VoteSigner
 
   def sign
     raise StandardError unless validate_data(@data, @signature, @pkey)
-    Voter.find_by(voter_id: @voter_id).update(signed_vote_at: Time.now)
-    admin_key = OpenSSL::PKey.read(Administrator.config.online_voting_secret)
-    signed_message = admin_key.sign(OpenSSL::Digest::SHA256.new, @data)
+    voter = Voter.find_by(voter_id: @voter_id)
+
+    if voter.signed_vote_at
+      raise StandardError
+    else
+      voter.update(signed_vote_at: Time.now)
+      admin_key = OpenSSL::PKey.read(Administrator.config.online_voting_secret)
+      admin_key.sign(OpenSSL::Digest::SHA256.new, @data)
+    end
   rescue ActiveRecord::RecordNotFound => e
     puts "voter not found! #{@voter_id}"
   end

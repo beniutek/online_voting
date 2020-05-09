@@ -10,18 +10,29 @@ class DataSigner
   end
 
   def sign
-    salt, bit_commitment = generate_bit_commitment(message)
-    signed_message = sign_message(bit_commitment)
-    base64 = Base64.encode64(signed_message)
-    [salt, key, bit_commitment, base64]
+    bit_commitment = generate_bit_commitment(message)
+    salt, blinded_message = blind_message(bit_commitment)
+    signed_message = sign_message(blinded_message)
+
+    {
+      salt: salt,
+      private_key: key,
+      bit_commitment: bit_commitment,
+      blinded_message: blinded_message,
+      signed_message: signed_message
+    }
   end
 
   private
 
   def generate_bit_commitment(message)
+    key.private_encrypt(message)
+  end
+
+  def blind_message(message)
     salt = OpenSSL::Random.random_bytes(256)
-    bit_commitment = Digest::SHA256.hexdigest("#{salt}.#{message}")
-    [salt, bit_commitment]
+    blinded_message = Digest::SHA256.hexdigest("#{salt}.#{message}")
+    [salt, blinded_message]
   end
 
   def sign_message(message)
@@ -29,10 +40,10 @@ class DataSigner
   end
 
   def key
-    @key ||= @private_key ? OpenSSL::PKey.read(@private_key) : generated_key
+    @key ||= @private_key ? OpenSSL::PKey.read(@private_key) : generate_key
   end
 
-  def generated_key
+  def generate_key
     @generated_key ||= OpenSSL::PKey::RSA.new(2048)
   end
 end

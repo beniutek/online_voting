@@ -6,16 +6,17 @@ class AdminClient
     @uri = uri
   end
 
-  def get_admin_signature(voter_id, bit_commitment, signed_message, public_key)
+  def get_admin_signature(voter_id, message, signed_message, public_key)
     values = {
       data: {
         voter_id: voter_id,
-        signature: signed_message,
-        message: bit_commitment,
+        message: message,
+        signature: Base64.encode64(signed_message),
         public_key: public_key,
       }
     }
     headers = {}
+
     @client.post(@uri, values, headers)
   rescue StandardError => e
     puts "some shenaningans happening while sending request to admin: "
