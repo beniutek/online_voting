@@ -12,6 +12,12 @@ class VotersController < ApplicationController
     render json: response_json
   end
 
+  def public_key
+    render json: { key: Administrator.config.public_key }
+  end
+
+  private
+
   def blinded_data_param
     params[:data][:message]
   end
