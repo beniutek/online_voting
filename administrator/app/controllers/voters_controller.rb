@@ -16,7 +16,7 @@ class VotersController < ApplicationController
     if response_json.empty?
       render json: {}, status: 403
     else
-      render response_json, status: 200
+      render json: response_json, status: 200
     end
   end
 

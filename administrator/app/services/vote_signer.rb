@@ -12,7 +12,7 @@ class VoteSigner
     raise StandardError unless validate_data(@data, @signature, @pkey)
     voter = Voter.find_by(voter_id: @voter_id)
 
-    if false # voter.signed_vote_at
+    if false # voter.allowed_to_vote?
       raise StandardError
     else
       voter.update(signed_vote_at: Time.now)

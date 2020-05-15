@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+if Voter.count == 0
+  voter_ids = File.read(Rails.root.join('voter_ids.txt')).split
+
+  Voter.insert_all(voter_ids.map { |id| { voter_id: id } })
+end
