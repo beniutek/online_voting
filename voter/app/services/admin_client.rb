@@ -24,4 +24,9 @@ class AdminClient
     puts "FIN"
     {}
   end
+
+  def admin_voters_list
+    headers = {}
+    @client.get(@uri, headers)
+  end
 end
