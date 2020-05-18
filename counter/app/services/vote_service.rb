@@ -1,9 +1,11 @@
 class VoteService
-  def initialize
-    @
+  def initialize(client: OnlineVoting::AdminClient.new)
+    @client = client
   end
 
   def count_vote(signature:, message:)
+    admin_public_key = Counter.config.admin_public_key
+
   end
 
   def all_accounted_for_votes
