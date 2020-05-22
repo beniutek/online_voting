@@ -1,5 +1,7 @@
 module Counter
-  def self.config
-    Rails.application.config
+  extend self
+
+  def config
+    Rails.application.config.counter
   end
 end

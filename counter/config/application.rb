@@ -14,7 +14,7 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
-require "lib/administrator.rb"
+require_relative "../../lib/online_voting/rsa_blind_signer.rb"
 require_relative "../../lib/online_voting/admin_client.rb"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -25,6 +25,9 @@ module Counter
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
     config.autoload_paths += %W(#{config.root}/lib)
+    config.counter = ActiveSupport::OrderedOptions.new
+    config.counter.admin_public_key = OpenSSL::PKey.read(ENV['ADMIN_PUBLIC_KEY'])
+    config.counter.administrator_module_uri = ENV['ADMINISTRATOR_MODULE_URI']
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

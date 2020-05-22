@@ -3,11 +3,17 @@ require 'openssl'
 module OnlineVoting
   class RSABlindSigner
     def sign(message:, key:)
+      _sign(message, key)
+    end
+
+    def blind_sign(message:, key:)
       digest = OpenSSL::Digest::SHA224.hexdigest(message)
 
       # m' = mr^e (mod n)
       msg_int_blinded, r = blind(digest, key)
       msg_int_blinded_signed = _sign(msg_int_blinded, key)
+      msg_int = text_to_int(digest)
+      msg_int_signed = _sign(msg_int, key)
 
       [
         msg_int_blinded,

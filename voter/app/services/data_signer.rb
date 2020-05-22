@@ -2,55 +2,69 @@ require 'openssl'
 require 'digest'
 
 class DataSigner
-  attr_reader :key, :message
+  attr_reader :message
 
-  def initialize(message: nil, private_key: nil)
+  def initialize(private_key: nil)
     @private_key = private_key
-    @message = message
   end
 
-  def sign
-    bit_commitment = generate_bit_commitment(message)
+  def sign_vote(message, voter_id)
+    commitment = bit_commitment(message)
+    blinded, r = rsa.blind(commitment, admin_key)
+    blinded_signed = rsa._sign(blinded, voter_key)
 
-    blinded, signed, r = Signer.new.sign(message: bit_commitment, key: key)
+    admin_response = admin_client.get_admin_signature(voter_id, blinded, blinded_signed, voter_key.public_key.to_s)
 
-    {
-      blinded_message: blinded,
-      signed_message: signed,
-      r: r,
-      private_key: key,
-      bit_commitment: bit_commitment
-    }
-    # {
-    #   salt: salt,
-    #   private_key: key,
-    #   bit_commitment: bit_commitment,
-    #   blinded_message: blinded_message,
-    #   signed_message: signed_message
-    # }
+    raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
+
+    signed_by_a = admin_response['data']['admin_signature']
+
+    [
+      blinded,
+      admin_response['data']['admin_signature'],
+      r,
+      voter_key,
+      rsa.text_to_int(commitment)
+    ]
   end
 
-  private
-
-  def generate_bit_commitment(message)
-    key.private_encrypt(message)
+  def bit_commitment(message)
+    digest(message)
   end
 
-  # def blind_message(message)
-  #   salt = OpenSSL::Random.random_bytes(256)
-  #   blinded_message = Digest::SHA256.hexdigest("#{salt}.#{message}")
-  #   [salt, blinded_message]
-  # end
+  def digest(message)
+    OpenSSL::Digest::SHA224.hexdigest(message)
+  end
 
-  # def sign_message(message)
-  #   key.sign(OpenSSL::Digest::SHA256.new, message)
-  # end
+  def unblind_message(signed_message, r, signing_key = admin_key)
+    unblinded_signed_message = rsa.unblind(signed_message, r, signing_key)
+  end
 
-  def key
-    @key ||= @private_key ? OpenSSL::PKey.read(@private_key) : generate_key
+  def verify(signed_message, message, signing_key = admin_key)
+    msg_int = rsa.text_to_int(message)
+    rsa.verify(signed: signed_message, message: msg_int, key: signing_key)
+  end
+
+  def rsa
+    @rsa ||= OnlineVoting::RSABlindSigner.new
+  end
+
+  def admin_client
+    @admin_client ||= OnlineVoting::AdminClient.new(uri: Voter.config.administrator_module_uri)
+  end
+
+  def admin_key
+    @admin_key ||= OpenSSL::PKey.read(admin_client.get_admin_public_key(Voter.config.administrator_public_key_uri))
+  end
+
+  def voter_key
+    @voter_key ||= @private_key ? OpenSSL::PKey.read(@private_key) : generate_key
   end
 
   def generate_key
     @generated_key ||= OpenSSL::PKey::RSA.new(512)
+  end
+
+  class AdminSignatureError < StandardError
   end
 end

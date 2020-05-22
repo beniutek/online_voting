@@ -36,6 +36,8 @@ module Voter
     # the framework and any gems in your application.
     config.voter = ActiveSupport::OrderedOptions.new
     config.voter.administrator_module_uri = ENV['ADMINISTRATOR_MODULE_URI']
+    config.voter.administrator_public_key_uri = ENV['ADMINISTRATOR_MODULE_PUBLIC_KEY_URI'] || "http://localhost:3030/public-key"
+    config.voter.counter_module_uri = ENV['COUNTER_MODULE_URI']
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.

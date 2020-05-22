@@ -1,24 +1,32 @@
 class VotesController < ApplicationController
   def sign
-    result = DataSigner.new(private_key: nil, message: message).sign
-    key = result[:private_key]
-    puts "DATA SIGNER: "
-    result.each do |key, val|
-      puts "#{key} : #{val}"
-      puts ""
+    blinded, blinded_signed_message, r, voter_key, bit_commitment = data_signer.sign_vote(message, voter_id)
+    unblinded_signed_message = data_signer.unblind_message(blinded_signed_message, r)
+    counter_response = CounterClient.new.send_vote(unblinded_signed_message, bit_commitment)
+    if counter_response.empty?
+      render json: { error: "counter couldn't register your vote" }, status: 400
+    else
+      render json: {
+        data: {
+          key: voter_key.to_s,
+          blidning_factor: r,
+          bit_commitment: bit_commitment,
+          blinded_message_signed_by_admin: blinded_signed_message,
+          unblinded_message_signed_by_admin: unblinded_signed_message,
+          index: counter_response["data"]["index"],
+        }
+      }
     end
-    admin_response = AdminClient.new.get_admin_signature(voter_id, result[:blinded_message], result[:signed_message], key.public_key.to_s)
-    # response = CounterClient.new.send_vote(result[2], admin_response[:signed_message])
-    puts "ADMIN RESP"
-    JSON.parse(admin_response)["data"].each do |key, val|
-      puts "#{key} : #{val}"
-      puts " "
-    end
-
-    render json: admin_response
+  rescue DataSigner::AdminSignatureError => e
+    puts "Exception: #{e.message}"
+    render json: { error: "admin signature could not be obtained" }, status: 400
   end
 
   private
+
+  def data_signer
+    @data_signer ||= DataSigner.new(private_key: nil)
+  end
 
   def message
     params[:data][:message]
