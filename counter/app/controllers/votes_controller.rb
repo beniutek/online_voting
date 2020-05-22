@@ -1,4 +1,4 @@
-class VotesController < ApplicationController
+class VotesController < ApiController
   def index
     render json: vote_service.all_accounted_for_votes
   end

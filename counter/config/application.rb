@@ -12,7 +12,7 @@ require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
-# require "sprockets/railtie"
+require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 require_relative "../../lib/online_voting/rsa_blind_signer.rb"
 require_relative "../../lib/online_voting/admin_client.rb"
@@ -28,6 +28,10 @@ module Counter
     config.counter = ActiveSupport::OrderedOptions.new
     config.counter.admin_public_key = OpenSSL::PKey.read(ENV['ADMIN_PUBLIC_KEY'])
     config.counter.administrator_module_uri = ENV['ADMINISTRATOR_MODULE_URI']
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+    config.middleware.use Rack::MethodOverride
+    config.middleware.use ActionDispatch::Flash
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

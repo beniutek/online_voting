@@ -1,4 +1,4 @@
-class ResultssController < ApplicationController
+class ResultsController < ApiController
   def index
     render json: Result.first
   end
