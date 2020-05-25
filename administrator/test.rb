@@ -1,10 +1,23 @@
 def foo
-  msg = "hello world!"
+  message = "hello world!"
 
   vkey = OpenSSL::PKey::RSA.new(512)
   akey = OpenSSL::PKey::RSA.new(512)
 
   rsa = OnlineVoting::RSABlindSigner.new
+  # msg = OpenSSL::Digest::SHA224.hexdigest(message)
+  cipher = OpenSSL::Cipher::AES256.new :CBC
+  cipher.encrypt
+  iv = cipher.random_iv
+  key = SecureRandom.hex(16)
+  cipher.key = key
+  encrypted_text = cipher.update(message) + cipher.final
+
+  msg = Base64.encode64(encrypted_text)
+
+  puts "Message: #{message}"
+  puts "MSG: #{msg}"
+
   blinded, r = rsa.blind(msg, akey.public_key)
   blinded_signed = rsa._sign(blinded, vkey)
 
@@ -32,6 +45,16 @@ def foo
       if rsa.verify(signed: signed_by_a_unblinded, message: msg_int, key: akey.public_key)
         puts "UNLINDED SIGNED VERIFIED!"
         puts "GOOD JOB!"
+        decoded64 = Base64.decode64(msg)
+        decipher = OpenSSL::Cipher::AES256.new :CBC
+        decipher.decrypt
+        decipher.iv = iv
+        decipher.key = key
+        plain_text = decipher.update(decoded64) + decipher.final
+        puts "============================"
+        puts plain_text
+        puts "============================"
+        puts "\nFIN"
       else
         puts "\nFAILED TO VERIFY SIGNED BY ADMIN UNLBINDED"
         puts "signed by admin and unlbinded: #{signed_by_a_unblinded}"

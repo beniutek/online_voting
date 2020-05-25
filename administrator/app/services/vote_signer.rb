@@ -9,14 +9,14 @@ class VoteSigner
   end
 
   def sign
-    raise ValidationError unless validate_data(@data, @signature, @pkey)
+    raise SignatureValidationError unless validate_data(@data, @signature, @pkey)
     voter = Voter.find_by(voter_id: @voter_id)
 
-    if voter.allowed_to_vote?
+    if voter && voter.allowed_to_vote?
       voter.update(signed_vote_at: Time.now)
       rsa.sign(message: @data.to_i, key: admin_key)
     else
-      raise ValidationError
+      raise ForbiddenToVoteError
     end
   rescue StandardError => e
     puts "Exception: #{e.message}"
@@ -38,6 +38,9 @@ class VoteSigner
     rsa.verify(message: data.to_i, signed: signature.to_i, key: key)
   end
 
-  class ValidationError < StandardError
+  class SignatureValidationError < StandardError
+  end
+
+  class ForbiddenToVoteError < StandardError
   end
 end

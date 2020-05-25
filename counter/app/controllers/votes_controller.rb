@@ -4,19 +4,29 @@ class VotesController < ApiController
   end
 
   def create
-    valid, index = vote_service.count_vote(signature: signature_param, message: message_param)
+    valid, i = vote_service.count_vote(signature: signature_param, message: message_param)
     if valid
       render json: {
-        index: index,
+        index: i,
         bit_commitment: message_param,
         signature: signature_param
       }
     else
-      render json: {}, status: 400
+      render json: {
+        error: i,
+      }, status: 400
     end
   end
 
+  def open
+
+  end
+
   private
+
+  def blinding_factor_param
+    params[:r]
+  end
 
   def vote_service
     @vote_service ||= VoteService.new

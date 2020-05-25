@@ -1,21 +1,16 @@
 class VotesController < ApplicationController
   def sign
-    blinded, blinded_signed_message, r, voter_key, bit_commitment = data_signer.sign_vote(message, voter_id)
-    unblinded_signed_message = data_signer.unblind_message(blinded_signed_message, r)
-    counter_response = CounterClient.new.send_vote(unblinded_signed_message, bit_commitment)
-    if counter_response.empty?
-      render json: { error: "counter couldn't register your vote" }, status: 400
+    result = data_signer.sign_vote(message, voter_id)
+    unblinded_signed_message = data_signer.unblind_message(result.blinded_signed_message, result.r)
+
+    counter_response = CounterClient.new.send_vote(unblinded_signed_message, result.bit_commitment)
+
+    if counter_response.empty? || counter_response['error']
+      render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
     else
       render json: {
-        data: {
-          key: voter_key.to_s,
-          blidning_factor: r,
-          bit_commitment: bit_commitment,
-          blinded_message_signed_by_admin: blinded_signed_message,
-          unblinded_message_signed_by_admin: unblinded_signed_message,
-          index: counter_response["data"]["index"],
-        }
-      }
+        data: result.to_h.merge(unblinded_message_signed_by_admin: unblinded_signed_message, index: counter_response["index"])
+      }, status: 200
     end
   rescue DataSigner::AdminSignatureError => e
     puts "Exception: #{e.message}"
@@ -23,6 +18,10 @@ class VotesController < ApplicationController
   end
 
   private
+
+  def vote
+    @vote ||= data_signer.sign_vote(message, voter_id)
+  end
 
   def data_signer
     @data_signer ||= DataSigner.new(private_key: nil)

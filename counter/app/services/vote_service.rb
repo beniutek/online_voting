@@ -5,12 +5,15 @@ class VoteService
 
   def count_vote(signature:, message:)
     if should_be_counted?(message, signature)
-      rank = SecureRandom.uuid
-      Vote.create!(rank: rank, bit_commitment: message, signed_message: signature)
-      [true, rank]
+      vote = Vote.create!(bit_commitment: message, signed_message: signature)
+      [true, vote.reload.uuid]
     else
-      [false, nil]
+      [false, { signature: has_correct_signature?(message, signature), first_time: voting_first_time?(message, signature) }]
     end
+  end
+
+  def open_vote(uuid, key)
+    vote = Vote.find_by(uuid: uuid)
   end
 
   def should_be_counted?(message, signature)
@@ -23,7 +26,7 @@ class VoteService
   end
 
   def has_correct_signature?(message, signature)
-    rsa.verify(signed: signature.to_i, message: message.to_i, key: Rails.application.config.counter.admin_public_key)
+    rsa.verify(signed: signature.to_i, message: rsa.text_to_int(message), key: Rails.application.config.counter.admin_public_key)
   end
 
   def rsa
