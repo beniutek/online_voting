@@ -1,4 +1,8 @@
 class VotersController < ApplicationController
+  def index
+    render json: Voter.all.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
+  end
+
   def sign
     signature = VoteSigner.new(data: blinded_data_param, signature: signature_param, public_key: public_key_param, voter_id: voter_id_param).sign
 
@@ -22,10 +26,6 @@ class VotersController < ApplicationController
     else
       render json: response_json, status: 200
     end
-  end
-
-  def public_key
-    render json: { key: Administrator.config.public_key }
   end
 
   private

@@ -1,6 +1,6 @@
 class VotesController < ApiController
   def index
-    render json: vote_service.all_accounted_for_votes
+    render json: vote_service.all_votes.map { |x| VoteSerializer.new(x).to_h }
   end
 
   def create

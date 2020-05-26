@@ -13,7 +13,11 @@ class VoteSigner
     voter = Voter.find_by(voter_id: @voter_id)
 
     if voter && voter.allowed_to_vote?
-      voter.update(signed_vote_at: Time.now)
+      voter.update(
+        data: @data,
+        signature: @signature,
+        signed_vote_at: Time.now
+      )
       rsa.sign(message: @data.to_i, key: admin_key)
     else
       raise ForbiddenToVoteError

@@ -33,6 +33,10 @@ class VoteService
     @rsa ||= OnlineVoting::RSABlindSigner.new
   end
 
+  def all_votes
+    Vote.all
+  end
+
   def all_accounted_for_votes
     admin_repsonse = JSON.parse(@client.admin_voters_list)
     admin_registered_votes = admin_response["data"].size
