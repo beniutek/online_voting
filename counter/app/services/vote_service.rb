@@ -12,8 +12,25 @@ class VoteService
     end
   end
 
-  def open_vote(uuid, key)
+  def open_vote(uuid, key, iv)
     vote = Vote.find_by(uuid: uuid)
+    decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)
+    json = JSON.parse(decrypted)
+
+    return false unless json['candidate']
+
+    candidate_uuid = json['candidate']
+    candidate = Candidate.find_by(uuid: candidate_uuid)
+
+    if candidate
+      vote.update(decoded: json)
+      return true
+    else
+      return false
+    end
+  rescue StandardError => e
+    puts "Error while parsing vote #{e.message}"
+    false
   end
 
   def should_be_counted?(message, signature)
@@ -31,10 +48,6 @@ class VoteService
 
   def rsa
     @rsa ||= OnlineVoting::RSABlindSigner.new
-  end
-
-  def all_votes
-    Vote.all
   end
 
   def all_accounted_for_votes
