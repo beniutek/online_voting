@@ -13,6 +13,8 @@ class VoteSigner
     voter = Voter.find_by(voter_id: @voter_id)
 
     if voter && voter.allowed_to_vote?
+      puts "\n\nSIGNIGN DATA: #{@data}\n\n"
+
       voter.update(
         data: @data,
         signature: @signature,

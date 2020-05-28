@@ -11,41 +11,42 @@ def foo
   iv = cipher.random_iv
   key = SecureRandom.hex(16)
   cipher.key = key
-  encrypted_text = cipher.update(message) + cipher.final
+  encrypted_message = cipher.update(message) + cipher.final
 
-  msg = Base64.encode64(encrypted_text)
+  encoded_encrypted_message = Base64.encode64(encrypted_message)
 
   puts "Message: #{message}"
-  puts "MSG: #{msg}"
+  puts "MSG: #{encrypted_message}"
 
-  blinded, r = rsa.blind(msg, akey.public_key)
-  blinded_signed = rsa._sign(blinded, vkey)
+  blinded_encoded_encrypted_message, r = rsa.blind(encoded_encrypted_message, akey.public_key)
+  signed_blinded_encoded_encrypted_message = rsa._sign(blinded_encoded_encrypted_message, vkey)
 
   puts "\nblinded: "
-  puts blinded
+  puts blinded_encoded_encrypted_message
 
   puts "\nblinded signed: "
-  puts blinded_signed
-  signed_by_a = nil
+  puts signed_blinded_encoded_encrypted_message
+  signed_by_admin_blinded_encoded_encrypted_message = nil
 
-  if rsa.verify(signed: blinded_signed, message: blinded, key: vkey.public_key)
-    puts "MESSAGE IS OK"
+  if rsa.verify(signed: signed_blinded_encoded_encrypted_message, message: blinded_encoded_encrypted_message, key: vkey.public_key)
+    puts "\nMESSAGE IS OK"
 
-    signed_by_a = rsa._sign(blinded, akey)
+    signed_by_admin_blinded_encoded_encrypted_message = rsa._sign(blinded_encoded_encrypted_message, akey)
 
-    if rsa.verify(signed: signed_by_a, message: blinded, key: akey.public_key)
-      puts "ADMIN MESSAGE IS OK"
+    if rsa.verify(signed: signed_by_admin_blinded_encoded_encrypted_message, message: blinded_encoded_encrypted_message, key: akey.public_key)
+      puts "\nADMIN MESSAGE IS OK"
 
-      signed_by_a_unblinded = rsa.unblind(signed_by_a, r, akey.public_key)
+      signed_by_admin_encoded_encrypted_message = rsa.unblind(signed_by_admin_blinded_encoded_encrypted_message, r, akey.public_key)
 
       puts "\nUNBLINDED: "
-      puts signed_by_a_unblinded
+      puts signed_by_admin_encoded_encrypted_message
 
-      msg_int = rsa.text_to_int(msg)
-      if rsa.verify(signed: signed_by_a_unblinded, message: msg_int, key: akey.public_key)
-        puts "UNLINDED SIGNED VERIFIED!"
+      msg_int = rsa.text_to_int(encoded_encrypted_message)
+
+      if rsa.verify(signed: signed_by_admin_encoded_encrypted_message, message: msg_int, key: akey.public_key)
+        puts "\nUNLINDED SIGNED VERIFIED!"
         puts "GOOD JOB!"
-        decoded64 = Base64.decode64(msg)
+        decoded64 = Base64.decode64(encoded_encrypted_message)
         decipher = OpenSSL::Cipher::AES256.new :CBC
         decipher.decrypt
         decipher.iv = iv
@@ -57,13 +58,13 @@ def foo
         puts "\nFIN"
       else
         puts "\nFAILED TO VERIFY SIGNED BY ADMIN UNLBINDED"
-        puts "signed by admin and unlbinded: #{signed_by_a_unblinded}"
+        puts "signed by admin and unlbinded: #{signed_by_admin_encoded_encrypted_message}"
         puts "message: #{msg_int}"
       end
     else
-      puts "FAILED TO VERIGY SIGNED BY ADMIN MESSAGE"
+      puts "\nFAILED TO VERIGY SIGNED BY ADMIN MESSAGE"
     end
   else
-    puts "FAILED TO VERIFY BLINDED SIGNED MESSAGE WITH VKEY"
+    puts "\nFAILED TO VERIFY BLINDED SIGNED MESSAGE WITH VKEY"
   end
 end

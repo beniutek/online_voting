@@ -3,7 +3,7 @@ class VotersController < ApplicationController
     render json: Voter.all.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
   end
 
-  def sign
+  def create
     signature = VoteSigner.new(data: blinded_data_param, signature: signature_param, public_key: public_key_param, voter_id: voter_id_param).sign
 
     response_json = {}

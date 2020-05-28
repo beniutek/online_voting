@@ -4,6 +4,7 @@ class VoteService
   end
 
   def count_vote(signature:, message:)
+    binding.pry
     if should_be_counted?(message, signature)
       vote = Vote.create!(bit_commitment: message, signed_message: signature)
       [true, vote.reload.uuid]
