@@ -19,7 +19,7 @@ class VotesController < ApiController
   end
 
   def open
-    if vote_service.open_vote(params[:uuid], params[:key], params[:iv])
+    if vote_service.open_vote(params[:id], params[:data][:key], params[:data][:iv])
       render json: {}, status: 200
     else
       render json: {}, status: 400

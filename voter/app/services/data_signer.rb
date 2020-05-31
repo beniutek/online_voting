@@ -9,29 +9,10 @@ class DataSigner
   end
 
   def sign_vote(message, voter_id)
-    puts "SIGNIGN MESSAGE: #{message}"
-
-    encrypted_msg, msg_key, iv = encrypt(message)
-
-    puts "\nCOMMITMENT: #{encrypted_msg}"
-
+    encrypted_msg, msg_key, iv = encrypt(message.to_s)
     encoded_encrypted_msg = Base64.encode64(encrypted_msg)
-
-    puts "\nENCODED COMMITMENT: #{encoded_encrypted_msg}"
-
     blinded_encoded_encrypted_msg, r = rsa.blind(encoded_encrypted_msg, admin_key)
-
-    puts "\nBLINDED #{blinded_encoded_encrypted_msg}"
-
     voter_signed_blinded_encoded_encrypted_msg = rsa._sign(blinded_encoded_encrypted_msg, voter_key)
-
-    puts "\nBLINDED SIGNED: #{voter_signed_blinded_encoded_encrypted_msg}"
-
-    if rsa.verify(signed: voter_signed_blinded_encoded_encrypted_msg, message: blinded_encoded_encrypted_msg, key: voter_key)
-      puts "\nFIRST STEP OKAY!\n"
-    else
-      raise StandardError.new("really?")
-    end
 
     admin_response = admin_client.get_admin_signature(
       voter_id,
@@ -42,14 +23,6 @@ class DataSigner
     raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
 
     admin_signed_blinded_encoded_encrypted_msg = admin_response['data']['admin_signature']
-
-    binding.pry
-    if rsa.verify(signed: admin_signed_blinded_encoded_encrypted_msg, message: blinded_encoded_encrypted_msg, key: admin_key)
-      puts "\nADMIN MESSAGE IS OK\n"
-    else
-      raise StandardError.new("response from admin can't be verified")
-    end
-
     admin_signed_encoded_encrypted_msg = rsa.unblind(admin_signed_blinded_encoded_encrypted_msg, r, admin_key)
     msg_int = rsa.text_to_int(encoded_encrypted_msg)
 
@@ -61,15 +34,13 @@ class DataSigner
       raise StandardError.new("unblinded signature invalid")
     end
 
-    result = DataSignerResult.new(encrypted_msg, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key, msg_key, Base64.encode64(iv))
-    # result.bit_commitment =  encoded_commitment
-    # result.blinded_message = blinded
-    # result.blinded_signed_message = signed_by_a
-    # result.r = r
-    # result.voter_signature_key = voter_key
-    # result.bit_commitment_key = bit_commitment_key
-    # result.bit_commitment_iv = Base64.encode64(iv)
-    result
+    x = DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key, msg_key, Base64.encode64(iv))
+    puts "\n================"
+    x.to_h.each do |k,v|
+      puts "#{k}: #{v}"
+    end
+    puts "================\n"
+    x
   end
 
   def encrypt(message)

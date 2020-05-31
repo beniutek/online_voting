@@ -4,9 +4,9 @@ class VoteService
   end
 
   def count_vote(signature:, message:)
-    binding.pry
     if should_be_counted?(message, signature)
-      vote = Vote.create!(bit_commitment: message, signed_message: signature)
+      text_msg = rsa.int_to_text(message.to_i)
+      vote = Vote.create!(bit_commitment: text_msg, signed_message: signature)
       [true, vote.reload.uuid]
     else
       [false, { signature: has_correct_signature?(message, signature), first_time: voting_first_time?(message, signature) }]
@@ -15,6 +15,7 @@ class VoteService
 
   def open_vote(uuid, key, iv)
     vote = Vote.find_by(uuid: uuid)
+    binding.pry
     decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)
     json = JSON.parse(decrypted)
 
@@ -44,7 +45,7 @@ class VoteService
   end
 
   def has_correct_signature?(message, signature)
-    rsa.verify(signed: signature.to_i, message: rsa.text_to_int(message), key: Rails.application.config.counter.admin_public_key)
+    rsa.verify(signed: signature.to_i, message: message.to_i, key: Rails.application.config.counter.admin_public_key)
   end
 
   def rsa
