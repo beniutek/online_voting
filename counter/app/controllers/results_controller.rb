@@ -1,5 +1,5 @@
 class ResultsController < ApiController
   def index
-    render json: Result.compute_results
+    render json: Result.get_results
   end
 end
