@@ -9,7 +9,7 @@ class DataSigner
   end
 
   def sign_vote(message, voter_id)
-    encrypted_msg, msg_key, iv = encrypt(message.to_s)
+    encrypted_msg, msg_key, iv = encrypt(message.to_json)
     encoded_encrypted_msg = Base64.encode64(encrypted_msg)
     blinded_encoded_encrypted_msg, r = rsa.blind(encoded_encrypted_msg, admin_key)
     voter_signed_blinded_encoded_encrypted_msg = rsa._sign(blinded_encoded_encrypted_msg, voter_key)
@@ -20,7 +20,9 @@ class DataSigner
       voter_signed_blinded_encoded_encrypted_msg,
       voter_key.public_key.to_s)
 
+    binding.pry
     raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
+
 
     admin_signed_blinded_encoded_encrypted_msg = admin_response['data']['admin_signature']
     admin_signed_encoded_encrypted_msg = rsa.unblind(admin_signed_blinded_encoded_encrypted_msg, r, admin_key)

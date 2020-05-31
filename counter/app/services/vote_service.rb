@@ -15,14 +15,14 @@ class VoteService
 
   def open_vote(uuid, key, iv)
     vote = Vote.find_by(uuid: uuid)
-    binding.pry
+
     decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)
     json = JSON.parse(decrypted)
 
     return false unless json['candidate']
 
-    candidate_uuid = json['candidate']
-    candidate = Candidate.find_by(uuid: candidate_uuid)
+    id = json['candidate'].to_i
+    candidate = Candidate.find_by(id: id)
 
     if candidate
       vote.update(decoded: json)

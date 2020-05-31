@@ -28,7 +28,7 @@ class VotesController < ApplicationController
   end
 
   def message
-    params[:data][:message][:candidate]
+    params[:data][:message]
   end
 
   def voter_id
