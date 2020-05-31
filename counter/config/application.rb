@@ -15,6 +15,7 @@ require "action_cable/engine"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 require_relative "../../lib/online_voting/rsa_blind_signer.rb"
+require_relative "../../lib/online_voting/crypto/message.rb"
 require_relative "../../lib/online_voting/admin_client.rb"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

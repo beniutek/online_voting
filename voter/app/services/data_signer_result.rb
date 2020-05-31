@@ -18,4 +18,8 @@ class DataSignerResult < Struct.new(
       bit_commitment_iv: bit_commitment_iv,
     }
   end
+
+  def to_s
+    to_h.to_s
+  end
 end
