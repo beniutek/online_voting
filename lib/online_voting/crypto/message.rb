@@ -1,18 +1,18 @@
 module OnlineVoting
   module Crypto
     module Message
-      def self.encrypt(message)
+      def self.encrypt(message, key = nil, iv = nil)
         cipher = OpenSSL::Cipher::AES256.new :CBC
         cipher.encrypt
-        iv = cipher.random_iv
-        random_key = SecureRandom.hex(16)
+        random_iv = cipher.random_iv || iv
+        random_key = SecureRandom.hex(16) || key
         cipher.key = random_key
 
         encrypted_text = cipher.update(message) + cipher.final
         [
           encrypted_text,
           random_key,
-          iv,
+          random_iv,
         ]
       end
 

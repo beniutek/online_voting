@@ -2,14 +2,14 @@ require 'openssl'
 require 'digest'
 
 class DataSigner
-  attr_reader :message
-
-  def initialize(private_key: nil)
+  def initialize(private_key: nil, encryptor: OnlineVoting::Crypto::Message, signer: OnlineVoting::Crypto::BlindSigner)
+    @signer = signer.new
     @private_key = private_key
+    @encryptor = encryptor
   end
 
   def sign_vote(message, voter_id)
-    encrypted_msg, msg_key, iv = encrypt(message.to_json)
+    encrypted_msg, msg_key, iv = @encryptor.encrypt(message.to_json)
     encoded_encrypted_msg = Base64.encode64(encrypted_msg)
     blinded_encoded_encrypted_msg, r = rsa.blind(encoded_encrypted_msg, admin_key)
     voter_signed_blinded_encoded_encrypted_msg = rsa._sign(blinded_encoded_encrypted_msg, voter_key)
@@ -20,7 +20,6 @@ class DataSigner
       voter_signed_blinded_encoded_encrypted_msg,
       voter_key.public_key.to_s)
 
-    binding.pry
     raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
 
 
@@ -36,28 +35,7 @@ class DataSigner
       raise StandardError.new("unblinded signature invalid")
     end
 
-    x = DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key, msg_key, Base64.encode64(iv))
-    puts "\n================"
-    x.to_h.each do |k,v|
-      puts "#{k}: #{v}"
-    end
-    puts "================\n"
-    x
-  end
-
-  def encrypt(message)
-    cipher = OpenSSL::Cipher::AES256.new :CBC
-    cipher.encrypt
-    iv = cipher.random_iv
-    random_key = SecureRandom.hex(16)
-    cipher.key = random_key
-
-    encrypted_text = cipher.update(message) + cipher.final
-    [
-      encrypted_text,
-      random_key,
-      iv,
-    ]
+    DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key, msg_key, Base64.encode64(iv))
   end
 
   def digest(message)
