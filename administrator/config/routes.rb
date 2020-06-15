@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   end
 
   get 'public-key', to: 'home#public_key'
+  get 'election-info', to: 'home#phase'
 end

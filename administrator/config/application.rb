@@ -35,6 +35,8 @@ module OnlineVoting
     # the framework and any gems in your application.
     config.administrator = ActiveSupport::OrderedOptions.new
     config.administrator.online_voting_secret = ENV['ONLINE_VOTING_SECRET']
+    config.administrator.election_start = ENV['ELECTION_START']&.to_datetime
+    config.administrator.election_end = ENV['ELECTION_END']&.to_datetime
     config.administrator.public_key = OpenSSL::PKey.read(config.administrator.online_voting_secret).public_key.to_s
     # Don't generate system test files.
     config.generators.system_tests = nil

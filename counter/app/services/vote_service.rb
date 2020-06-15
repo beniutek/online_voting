@@ -14,6 +14,10 @@ class VoteService
   end
 
   def open_vote(uuid, key, iv)
+    response = @client.get_election_info
+
+    raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
+
     vote = Vote.find_by(uuid: uuid)
 
     decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)
@@ -61,5 +65,8 @@ class VoteService
     else
       return Voter.count <= admin_registered_votes
     end
+  end
+
+  class AdminPhaseInProgressError < StandardError
   end
 end
