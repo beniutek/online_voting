@@ -17,7 +17,7 @@ Voter connects to the Administrator and Counter modules.
 ## Running the project
 
   ```
-  $rails server
+  $ rails server
   ```
 
 ## Enviromental variables
