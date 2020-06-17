@@ -16,11 +16,14 @@ Voter connects to the Administrator and Counter modules.
 
 ## Running the project
 
-  rails server
-
+  ```
+  $rails server
+  ```
 
 ## Enviromental variables
 list of env vars that have to be set before starting the project
 
+```
   ADMINISTRATOR_MODULE_URI
   COUNTER_MODULE_URI
+```
