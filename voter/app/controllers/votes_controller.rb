@@ -1,3 +1,9 @@
+=begin
+ Votes controller is responsible for handling requests made to /votes
+ Full API documentation can be found on:
+ == {apiary}[https://voterprojectpi.docs.apiary.io]
+=end
+
 class VotesController < ApplicationController
   def sign
     result = data_signer.sign_vote(message, voter_id)
@@ -12,6 +18,9 @@ class VotesController < ApplicationController
         data: result.to_h.merge(unblinded_message_signed_by_admin: unblinded_signed_message, index: counter_response["index"])
       }, status: 200
     end
+  rescue CounterClient::CounterClientError => e
+    puts "Exception: #{e.message}"
+    render json: { error: "counter returned a bad response" }, status: 400
   rescue DataSigner::AdminSignatureError => e
     puts "Exception: #{e.message}"
     render json: { error: "admin signature could not be obtained" }, status: 400
