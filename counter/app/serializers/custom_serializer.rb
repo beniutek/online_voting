@@ -1,3 +1,7 @@
+#
+# Very simple serializer for resoucers
+# Example implementation can be seen in VoteSerializer
+#
 class CustomSerializer
   attr_accessor :resource
 
