@@ -1,12 +1,17 @@
+# == Schema Information
+#
+# Table name: voters
+#
+#  id             :bigint           not null, primary key
+#  voter_id       :string           not null
+#  public_key     :string
+#  signature      :string
+#  data           :string
+#  signed_vote_at :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
 class Voter < ApplicationRecord
-  def self.allowed_to_vote?(vid)
-    voter = Voter.find_by(voter_id: vid)
-
-    return false unless voter
-
-    voter.allowed_to_vote?
-  end
-
   def allowed_to_vote?
     signed_vote_at.nil?
   end
