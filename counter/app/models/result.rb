@@ -1,4 +1,19 @@
+# == Schema Information
+#
+# Table name: results
+#
+#  id         :bigint           not null, primary key
+#  result     :jsonb
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# This probably is a very poor approach to presenting results.
+# I'll be revising it in the future
+#
 class Result < ApplicationRecord
+  #
+  # == Returns:
+  # a result object
   def self.get_results
     if Result.first
       Result.first.result

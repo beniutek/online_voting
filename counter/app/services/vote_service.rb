@@ -1,8 +1,14 @@
+=begin
+  This class is responsible for opening and counting votes send by the voter
+  Each vote should be signed by the administrator module
+=end
 class VoteService
-  def initialize(client: OnlineVoting::AdminClient.new)
-    @client = client
-  end
-
+  #
+  # == Parameters:
+  # signature::
+  #  This is the admin signature of the message
+  # message::
+  #  This is the original message
   def count_vote(signature:, message:)
     if should_be_counted?(message, signature)
       text_msg = rsa.int_to_text(message.to_i)
@@ -13,8 +19,16 @@ class VoteService
     end
   end
 
+  #
+  # == Parameters:
+  # uuid::
+  #  This is identifier of the vote
+  # key::
+  #  This is key which was used by the voter to make a bit commitment of the vote
+  # iv::
+  #  This is the initialization vector used to make the bit commitment
   def open_vote(uuid, key, iv)
-    response = @client.get_election_info
+    response = client.get_election_info
 
     raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
 
@@ -52,12 +66,8 @@ class VoteService
     rsa.verify(signed: signature.to_i, message: message.to_i, key: Rails.application.config.counter.admin_public_key)
   end
 
-  def rsa
-    @rsa ||= OnlineVoting::RSABlindSigner.new
-  end
-
   def all_accounted_for_votes
-    admin_repsonse = JSON.parse(@client.admin_voters_list)
+    admin_repsonse = JSON.parse(client.admin_voters_list)
     admin_registered_votes = admin_response["data"].size
 
     if Counter.config.strict_votes_count
@@ -65,6 +75,14 @@ class VoteService
     else
       return Voter.count <= admin_registered_votes
     end
+  end
+
+  def client
+    @client ||= OnlineVoting::AdminClient.new
+  end
+
+  def rsa
+    @rsa ||= OnlineVoting::RSABlindSigner.new
   end
 
   class AdminPhaseInProgressError < StandardError

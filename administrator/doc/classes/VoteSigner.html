@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>VoteSigner</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
+<script src="../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="VoteSigner">
+
+  
+
+    <meta name="keywords" content="VoteSigner class">
+  
+    <meta name="keywords" content="new, sign">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            VoteSigner
+            
+                <span class="parent">&lt;
+                    
+                    <a href="Object.html">Object</a>
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../files/app/services/vote_signer_rb.html">app/services/vote_signer.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+
+
+  
+
+
+  
+  
+
+
+  
+    <!-- Namespace -->
+    <div class="sectiontitle">Namespace</div>
+    <ul>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="VoteSigner/ForbiddenToVoteError.html">VoteSigner::ForbiddenToVoteError</a>
+        </li>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="VoteSigner/SignatureValidationError.html">VoteSigner::SignatureValidationError</a>
+        </li>
+      
+    </ul>
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>S</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-sign">sign</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(data:, signature:, public_key:, voter_id:)
+            
+            <a href="../classes/VoteSigner.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <h2 id="method-c-new-label-Parameters-3A">Parameters:</h2>
+<dl class="rdoc-list note-list"><dt>data
+<dd>
+<p>String. This is blinded message from the voter</p>
+</dd><dt>signature
+<dd>
+<p>String. This is signature of the blinded message</p>
+</dd><dt>public_key
+<dd>
+<p>String. This is voter public key</p>
+</dd><dt>voter_id
+<dd>
+<p>String. This is voter unique identificator</p>
+</dd></dl>
+
+<h2 id="method-c-new-label-Returns-3A">Returns:</h2>
+
+<p>a new <a href="VoteSigner.html"><code>VoteSigner</code></a> instance</p>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/services/vote_signer.rb, line 21</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-value">data:</span>, <span class="ruby-value">signature:</span>, <span class="ruby-value">public_key:</span>, <span class="ruby-value">voter_id:</span>)
+  <span class="ruby-ivar">@data</span> = <span class="ruby-identifier">data</span>
+  <span class="ruby-ivar">@pkey</span> = <span class="ruby-identifier">public_key</span>
+  <span class="ruby-ivar">@signature</span> = <span class="ruby-identifier">signature</span>
+  <span class="ruby-ivar">@voter_id</span> = <span class="ruby-identifier">voter_id</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-sign">
+            
+              <b>sign</b>()
+            
+            <a href="../classes/VoteSigner.html#method-i-sign" name="method-i-sign" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              <h2 id="method-i-sign-label-Returns-3A">Returns:</h2>
+
+<p>a blinded message signature</p>
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-sign_source')" id="l_method-i-sign_source">show</a>
+                
+              </p>
+              <div id="method-i-sign_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File app/services/vote_signer.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sign</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">SignatureValidationError</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">validate_data</span>(<span class="ruby-ivar">@data</span>, <span class="ruby-ivar">@signature</span>, <span class="ruby-ivar">@pkey</span>)
+  <span class="ruby-identifier">voter</span> = <span class="ruby-constant">Voter</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-value">voter_id:</span> <span class="ruby-ivar">@voter_id</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">voter</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">voter</span>.<span class="ruby-identifier">allowed_to_vote?</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\n\nSIGNIGN DATA: #{@data}\n\n&quot;</span>
+
+    <span class="ruby-identifier">voter</span>.<span class="ruby-identifier">update</span>(
+      <span class="ruby-value">data:</span> <span class="ruby-ivar">@data</span>,
+      <span class="ruby-value">signature:</span> <span class="ruby-ivar">@signature</span>,
+      <span class="ruby-value">signed_vote_at:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    )
+    <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">sign</span>(<span class="ruby-value">message:</span> <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-value">key:</span> <span class="ruby-identifier">admin_key</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ForbiddenToVoteError</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Exception: #{e.message}&quot;</span>
+  <span class="ruby-keyword">nil</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>

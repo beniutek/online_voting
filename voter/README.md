@@ -1,24 +1,29 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Voter module is basically a helper for a voter.
 
-Things you may want to cover:
+So that he won't have to do all the complicated cryptographic operations like signing, blinding or encrypting messages.
 
-* Ruby version
+Voter doesn't have a database because it's not needed.
+Voter connects to the Administrator and Counter modules.
 
-* System dependencies
+## Building the project
 
-* Configuration
+  ```
+  $ git pull
+  $ bundle install
+  ```
 
-* Database creation
+## Running the project
 
-* Database initialization
+  ```
+  $ rails server
+  ```
 
-* How to run the test suite
+## Enviromental variables
+list of env vars that have to be set before starting the project
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+  ADMINISTRATOR_MODULE_URI
+  COUNTER_MODULE_URI
+```
