@@ -44,9 +44,6 @@ class VoteSigner
     else
       raise ForbiddenToVoteError
     end
-  rescue StandardError => e
-    puts "Exception: #{e.message}"
-    nil
   end
 
   class SignatureValidationError < StandardError

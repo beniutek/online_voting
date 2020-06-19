@@ -20,7 +20,7 @@ class VotersController < ApplicationController
   rescue VoteSigner::SignatureValidationError => e
     render json: { error: "signature is invalid" }, status: 400
   rescue VoteSigner::ForbiddenToVoteError => e
-    render json: { error: "you're not allowed to vote" }, status: 403
+    render json: { error: "you're not allowed to vote", status: 403 }, status: :forbidden
   end
 
   private

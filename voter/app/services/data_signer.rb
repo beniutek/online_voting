@@ -60,7 +60,7 @@ class DataSigner
       raise StandardError.new("unblinded signature invalid")
     end
 
-    DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key, msg_key, Base64.encode64(iv))
+    DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key.to_s, msg_key, Base64.encode64(iv))
   end
 
   #

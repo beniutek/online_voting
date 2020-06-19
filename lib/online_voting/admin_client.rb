@@ -39,12 +39,15 @@ module OnlineVoting
       puts "some shenaningans happening while sending request to admin: "
       puts e.message
       puts "FIN"
-      ""
+      raise GetAdminSignatureError
     end
 
     def admin_voters_list
       headers = {}
       @client.get(@uri, headers)
+    end
+
+    class GetAdminSignatureError < StandardError
     end
   end
 end
