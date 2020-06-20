@@ -11,10 +11,7 @@ jobs:
       - checkout
       - run:
           name: Go to Voter
-          command: cd voter
-      - run:
-          name: Configure env
-          command: bundle install
-      - run:
-          name: check around
-          command: ls -al
+          command: |
+            cd voter
+            ls -al
+            bundle install
