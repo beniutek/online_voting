@@ -49,7 +49,7 @@ module Counter
         resource(
           '*',
           headers: :any,
-          methods: [:get, :options]
+          methods: [:get, :options, :post]
         )
       end
     end

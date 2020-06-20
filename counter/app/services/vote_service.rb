@@ -28,9 +28,9 @@ class VoteService
   # iv::
   #  This is the initialization vector used to make the bit commitment
   def open_vote(uuid, key, iv)
-    response = client.get_election_info
+    # response = client.get_election_info
 
-    raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
+    # raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
 
     vote = Vote.find_by(uuid: uuid)
 

@@ -17,7 +17,7 @@ module OnlineVoting
     end
 
     def get_election_info(uri = ELECTION_INFO_URI)
-      repsonse = @client.get(uri)
+      response = @client.get(uri)
       JSON.parse(response)
     end
 
