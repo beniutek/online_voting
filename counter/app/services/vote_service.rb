@@ -2,7 +2,6 @@
   This class is responsible for opening and counting votes send by the voter
   Each vote should be signed by the administrator module
 =end
-
 class VoteService
   #
   # == Parameters:
@@ -67,15 +66,8 @@ class VoteService
     rsa.verify(signed: signature.to_i, message: message.to_i, key: Rails.application.config.counter.admin_public_key)
   end
 
-  def all_accounted_for_votes
-    admin_repsonse = JSON.parse(client.admin_voters_list)
-    admin_registered_votes = admin_response["data"].size
-
-    if Counter.config.strict_votes_count
-      return Voter.count == admin_registered_votes
-    else
-      return Voter.count <= admin_registered_votes
-    end
+  def all_votes
+    Vote.all
   end
 
   def client

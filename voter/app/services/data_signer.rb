@@ -1,11 +1,8 @@
-=begin
- DataSigner is responsible for handling messages.
- This includes encryption, blinding, signing the message by admin module and veryfing the correctness of the message
-=end
-
 require 'openssl'
 require 'digest'
 
+# DataSigner is responsible for handling messages.
+# This includes encryption, blinding, signing the message by admin module and veryfing the correctness of the message
 class DataSigner
   attr_reader :admin_client
   #
@@ -46,7 +43,6 @@ class DataSigner
       blinded_encoded_encrypted_msg,
       voter_signed_blinded_encoded_encrypted_msg,
       voter_key.public_key.to_s)
-
 
     raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
 
@@ -89,6 +85,9 @@ class DataSigner
     rsa.verify(signed: signed_message, message: msg_int, key: signing_key)
   end
 
+  #
+  # This error is thrown if admin returns an empty/error message or
+  # if we detect that the signed message doesn't match with the message that we have sent
   class AdminSignatureError < StandardError
   end
 

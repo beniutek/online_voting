@@ -1,11 +1,11 @@
-Sun, 21 Jun 2020 10:51:05 +0200
+Sun, 21 Jun 2020 11:26:53 +0200
 README.md	Thu, 18 Jun 2020 19:09:30 +0200
 README.rdoc	Thu, 18 Jun 2020 19:09:30 +0200
 app/controllers/votes_controller.rb	Sat, 20 Jun 2020 01:21:40 +0200
 app/controllers/application_controller.rb	Thu, 16 Apr 2020 01:24:35 +0200
 app/services/counter_client.rb	Thu, 18 Jun 2020 19:09:30 +0200
 app/services/data_signer_result.rb	Sat, 20 Jun 2020 23:05:28 +0200
-app/services/data_signer.rb	Sat, 20 Jun 2020 23:54:55 +0200
+app/services/data_signer.rb	Sun, 21 Jun 2020 11:16:07 +0200
 app/models/application_record.rb	Thu, 16 Apr 2020 01:24:35 +0200
 lib/tasks/rdoc.rake	Sun, 21 Jun 2020 10:50:48 +0200
 lib/voter.rb	Sun, 03 May 2020 21:55:44 +0200
