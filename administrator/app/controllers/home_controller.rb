@@ -20,8 +20,7 @@ class HomeController < ApplicationController
   def phase
     render json: {
       elections: {
-        start: Administrator.config.election_start,
-        end: Administrator.config.election_end
+        admin_phase: admin_phase_finished?
       }
     }
   end

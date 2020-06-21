@@ -6,7 +6,7 @@
 
 class ResultsController < ApiController
   def index
-    if true
+    if admin_phase_finished?
       render json: Result.get_results
     else
       render json: { error: 'voting still in progress' }, status: :bad_request

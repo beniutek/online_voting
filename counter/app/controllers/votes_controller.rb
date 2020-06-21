@@ -6,7 +6,11 @@
 
 class VotesController < ApiController
   def index
-    render json: vote_service.all_votes.map { |x| VoteSerializer.new(x).to_h }
+    if admin_phase_finished?
+      render json: vote_service.all_votes.map { |x| VoteSerializer.new(x).to_h }
+    else
+      render json: { error: 'admin phase is not finished yet' }, status: 400
+    end
   end
 
   def create
