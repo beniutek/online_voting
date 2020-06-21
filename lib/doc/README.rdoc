@@ -1,3 +1,0 @@
-= README
-
-This is a shared librare of the code commonly used across the modules

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>OnlineVoting::AdminClient</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../css/github.css" type="text/css" media="screen" />
+<script src="../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <meta property="og:title" value="OnlineVoting::AdminClient">
+
+  
+
+    <meta name="keywords" content="OnlineVoting::AdminClient class">
+  
+    <meta name="keywords" content="new, get_admin_public_key, get_election_info, get_admin_signature, admin_voters_list">
+  
+</head>
+
+<body>
+    <div class="banner">
+        
+        <h1>
+            <span class="type">Class</span>
+            OnlineVoting::AdminClient
+            
+                <span class="parent">&lt;
+                    
+                    Object
+                    
+                </span>
+            
+        </h1>
+        <ul class="files">
+            
+            <li><a href="../../files/online_voting/admin_client_rb.html">online_voting/admin_client.rb</a></li>
+            
+        </ul>
+    </div>
+    <div id="bodyContent">
+        <div id="content">
+  
+
+
+  
+
+
+  
+  
+
+
+  
+    <!-- Namespace -->
+    <div class="sectiontitle">Namespace</div>
+    <ul>
+      
+        <li>
+          <span class="type">CLASS</span>
+          <a href="AdminClient/GetAdminSignatureError.html">OnlineVoting::AdminClient::GetAdminSignatureError</a>
+        </li>
+      
+    </ul>
+  
+
+
+  
+    <!-- Method ref -->
+    <div class="sectiontitle">Methods</div>
+    <dl class="methods">
+      
+        <dt>A</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-admin_voters_list">admin_voters_list</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>G</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-i-get_admin_public_key">get_admin_public_key</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-get_admin_signature">get_admin_signature</a>,
+              </li>
+            
+              
+              <li>
+                <a href="#method-i-get_election_info">get_election_info</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+        <dt>N</dt>
+        <dd>
+          <ul>
+            
+              
+              <li>
+                <a href="#method-c-new">new</a>
+              </li>
+            
+          </ul>
+        </dd>
+      
+    </dl>
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+    
+      <div class="sectiontitle">Class Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-c-new">
+            
+              <b>new</b>(client: RestClient, uri: nil)
+            
+            <a href="../../classes/OnlineVoting/AdminClient.html#method-c-new" name="method-c-new" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-c-new_source')" id="l_method-c-new_source">show</a>
+                
+              </p>
+              <div id="method-c-new_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File online_voting/admin_client.rb, line 9</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-value">client:</span> <span class="ruby-constant">RestClient</span>, <span class="ruby-value">uri:</span> <span class="ruby-keyword">nil</span>)
+  <span class="ruby-ivar">@client</span> = <span class="ruby-identifier">client</span>
+  <span class="ruby-ivar">@uri</span> = <span class="ruby-identifier">uri</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+      <div class="sectiontitle">Instance Public methods</div>
+      
+        <div class="method">
+          <div class="title method-title" id="method-i-admin_voters_list">
+            
+              <b>admin_voters_list</b>()
+            
+            <a href="../../classes/OnlineVoting/AdminClient.html#method-i-admin_voters_list" name="method-i-admin_voters_list" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-admin_voters_list_source')" id="l_method-i-admin_voters_list_source">show</a>
+                
+              </p>
+              <div id="method-i-admin_voters_list_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File online_voting/admin_client.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">admin_voters_list</span>
+  <span class="ruby-identifier">headers</span> = {}
+  <span class="ruby-ivar">@client</span>.<span class="ruby-identifier">get</span>(<span class="ruby-ivar">@uri</span>, <span class="ruby-identifier">headers</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-get_admin_public_key">
+            
+              <b>get_admin_public_key</b>(uri = PUBLIC_KEY_URI)
+            
+            <a href="../../classes/OnlineVoting/AdminClient.html#method-i-get_admin_public_key" name="method-i-get_admin_public_key" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-get_admin_public_key_source')" id="l_method-i-get_admin_public_key_source">show</a>
+                
+              </p>
+              <div id="method-i-get_admin_public_key_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File online_voting/admin_client.rb, line 14</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_admin_public_key</span>(<span class="ruby-identifier">uri</span> = <span class="ruby-constant">PUBLIC_KEY_URI</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@client</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">uri</span>)
+  <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>)[<span class="ruby-string">&#39;key&#39;</span>]
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-get_admin_signature">
+            
+              <b>get_admin_signature</b>(voter_id, message, signed_message, public_key, uri = VOTERS_URI)
+            
+            <a href="../../classes/OnlineVoting/AdminClient.html#method-i-get_admin_signature" name="method-i-get_admin_signature" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-get_admin_signature_source')" id="l_method-i-get_admin_signature_source">show</a>
+                
+              </p>
+              <div id="method-i-get_admin_signature_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File online_voting/admin_client.rb, line 24</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_admin_signature</span>(<span class="ruby-identifier">voter_id</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">signed_message</span>, <span class="ruby-identifier">public_key</span>, <span class="ruby-identifier">uri</span> = <span class="ruby-constant">VOTERS_URI</span>)
+  <span class="ruby-identifier">values</span> = {
+    <span class="ruby-value">data:</span> {
+      <span class="ruby-value">voter_id:</span> <span class="ruby-identifier">voter_id</span>,
+      <span class="ruby-value">message:</span> <span class="ruby-identifier">message</span>,
+      <span class="ruby-value">signature:</span> <span class="ruby-identifier">signed_message</span>,
+      <span class="ruby-value">public_key:</span> <span class="ruby-identifier">public_key</span>,
+    }
+  }
+  <span class="ruby-identifier">headers</span> = {}
+
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@client</span>.<span class="ruby-identifier">post</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">values</span>, <span class="ruby-identifier">headers</span>)
+
+  <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>)
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;some shenaningans happening while sending request to admin: &quot;</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;FIN&quot;</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">GetAdminSignatureError</span>
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+        <div class="method">
+          <div class="title method-title" id="method-i-get_election_info">
+            
+              <b>get_election_info</b>(uri = ELECTION_INFO_URI)
+            
+            <a href="../../classes/OnlineVoting/AdminClient.html#method-i-get_election_info" name="method-i-get_election_info" class="permalink">Link</a>
+          </div>
+
+          
+            <div class="description">
+              
+            </div>
+          
+
+          
+
+          
+
+          
+            
+            <div class="sourcecode">
+              
+              <p class="source-link">
+                Source:
+                <a href="javascript:toggleSource('method-i-get_election_info_source')" id="l_method-i-get_election_info_source">show</a>
+                
+              </p>
+              <div id="method-i-get_election_info_source" class="dyn-source">
+                <pre><span class="ruby-comment"># File online_voting/admin_client.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_election_info</span>(<span class="ruby-identifier">uri</span> = <span class="ruby-constant">ELECTION_INFO_URI</span>)
+  <span class="ruby-identifier">response</span> = <span class="ruby-ivar">@client</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">uri</span>)
+  <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>)
+<span class="ruby-keyword">end</span></pre>
+              </div>
+            </div>
+            
+          </div>
+        
+      
+    
+  
+</div>
+
+    </div>
+  </body>
+</html>
