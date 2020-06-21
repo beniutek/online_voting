@@ -10,3 +10,4 @@ if Voter.count == 0
 
   Voter.insert_all(voter_ids.map { |id| { voter_id: id } })
 end
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

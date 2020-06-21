@@ -5,7 +5,7 @@
 =end
 class VotersController < ApplicationController
   def index
-    render json: Voter.all.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
+    render json: Voter.has_voted.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
   end
 
   def create

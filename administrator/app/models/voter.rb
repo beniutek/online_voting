@@ -12,6 +12,8 @@
 #  updated_at     :datetime         not null
 #
 class Voter < ApplicationRecord
+  scope :has_voted, -> { where.not(signature: nil) }
+
   def allowed_to_vote?
     signed_vote_at.nil?
   end
