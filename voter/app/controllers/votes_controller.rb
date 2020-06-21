@@ -6,17 +6,21 @@
 
 class VotesController < ApplicationController
   def sign
-    result = data_signer.sign_vote(message, voter_id)
-    unblinded_signed_message = data_signer.unblind_message(result.blinded_signed_message, result.r)
+    if message && voter_id
+      result = data_signer.sign_vote(message, voter_id)
+      unblinded_signed_message = data_signer.unblind_message(result.blinded_signed_message, result.r)
 
-    counter_response = CounterClient.new.send_vote(unblinded_signed_message, result.bit_commitment)
+      counter_response = CounterClient.new.send_vote(unblinded_signed_message, result.bit_commitment)
 
-    if counter_response.empty? || counter_response['error']
-      render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
+      if counter_response.empty? || counter_response['error']
+        render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
+      else
+        render json: {
+          data: result.to_h.merge(unblinded_message_signed_by_admin: unblinded_signed_message.to_s, vote_index: counter_response["index"])
+        }, status: 200
+      end
     else
-      render json: {
-        data: result.to_h.merge(unblinded_message_signed_by_admin: unblinded_signed_message.to_s, vote_index: counter_response["index"])
-      }, status: 200
+      render json: { error: 'empty params' }, status: :bad_request
     end
   rescue CounterClient::CounterClientError => e
     puts "Exception: #{e.message}"
