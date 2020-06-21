@@ -10,17 +10,19 @@ class VotesController < ApiController
   end
 
   def create
-    valid, i = vote_service.count_vote(signature: signature_param, message: message_param)
-    if valid
-      render json: {
-        index: i,
-        bit_commitment: message_param,
-        signature: signature_param
-      }
+    if signature_param && message_param
+      valid, i = vote_service.count_vote(signature: signature_param, message: message_param)
+      if valid
+        render json: {
+          index: i,
+          bit_commitment: message_param,
+          signature: signature_param
+        }
+      else
+        render json: { error: i }, status: 400
+      end
     else
-      render json: {
-        error: i,
-      }, status: 400
+      render json: { error: 'missing params' }, status: 400
     end
   end
 
@@ -30,6 +32,8 @@ class VotesController < ApiController
     else
       render json: {}, status: 400
     end
+  rescue StandardError => e
+    render json: { error: 'something went wrong' }, status: 400
   end
 
   private
