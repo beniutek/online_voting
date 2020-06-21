@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>ResultsController</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
@@ -15,6 +13,10 @@
 
     <meta property="og:title" value="ResultsController">
 
+  
+    
+    <meta name="description" content="Results controller is responsible for handling requests made to /votes Full API documentation can be found on:  apiary.">
+    <meta property="og:description" content="Results controller is responsible for handling requests made to /votes Full API documentation can be found on:  apiary.">
   
 
     <meta name="keywords" content="ResultsController class">
@@ -45,6 +47,14 @@
     </div>
     <div id="bodyContent">
         <div id="content">
+  
+    <div class="description">
+      
+<p>Results controller is responsible for handling requests made to /votes Full API documentation can be found on:</p>
+
+<h2 id="class-ResultsController-label-apiary"><a href="https://counter4.docs.apiary.io/">apiary</a></h2>
+
+    </div>
   
 
 
@@ -127,7 +137,7 @@
                 
               </p>
               <div id="method-i-index_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/controllers/results_controller.rb, line 2</span>
+                <pre><span class="ruby-comment"># File app/controllers/results_controller.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">index</span>
   <span class="ruby-identifier">render</span> <span class="ruby-value">json:</span> <span class="ruby-constant">Result</span>.<span class="ruby-identifier">get_results</span>
 <span class="ruby-keyword">end</span></pre>

@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>DataSigner</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
@@ -32,7 +30,7 @@
             
                 <span class="parent">&lt;
                     
-                    <a href="Object.html">Object</a>
+                    Object
                     
                 </span>
             
@@ -139,6 +137,20 @@
 
 
     
+      <!-- Section attributes -->
+      <div class="sectiontitle">Attributes</div>
+      <table border='0' cellpadding='5'>
+        
+          <tr valign='top'>
+            <td class='attr-rw'>
+              [R]
+            </td>
+            <td class='attr-name'>admin_client</td>
+            <td class='attr-desc'></td>
+          </tr>
+        
+      </table>
+    
 
 
     <!-- Methods -->
@@ -148,7 +160,7 @@
         <div class="method">
           <div class="title method-title" id="method-c-new">
             
-              <b>new</b>(private_key: nil, encryptor: OnlineVoting::Crypto::Message, signer: OnlineVoting::Crypto::BlindSigner)
+              <b>new</b>(private_key: nil, encryptor: OnlineVoting::Crypto::Message, signer: OnlineVoting::Crypto::BlindSigner, admin_client: OnlineVoting::AdminClient)
             
             <a href="../classes/DataSigner.html#method-c-new" name="method-c-new" class="permalink">Link</a>
           </div>
@@ -183,11 +195,12 @@
                 
               </p>
               <div id="method-c-new_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 19</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-value">private_key:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-value">encryptor:</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">Crypto</span><span class="ruby-operator">::</span><span class="ruby-constant">Message</span>, <span class="ruby-value">signer:</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">Crypto</span><span class="ruby-operator">::</span><span class="ruby-constant">BlindSigner</span>)
+                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-value">private_key:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-value">encryptor:</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">Crypto</span><span class="ruby-operator">::</span><span class="ruby-constant">Message</span>, <span class="ruby-value">signer:</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">Crypto</span><span class="ruby-operator">::</span><span class="ruby-constant">BlindSigner</span>, <span class="ruby-value">admin_client:</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">AdminClient</span>)
   <span class="ruby-ivar">@signer</span> = <span class="ruby-identifier">signer</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@private_key</span> = <span class="ruby-identifier">private_key</span>
   <span class="ruby-ivar">@encryptor</span> = <span class="ruby-identifier">encryptor</span>
+  <span class="ruby-ivar">@admin_client</span> = <span class="ruby-identifier">admin_client</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">uri:</span> <span class="ruby-constant">Voter</span>.<span class="ruby-identifier">config</span>.<span class="ruby-identifier">administrator_module_uri</span>)
 <span class="ruby-keyword">end</span></pre>
               </div>
             </div>
@@ -201,7 +214,7 @@
         <div class="method">
           <div class="title method-title" id="method-i-sign_vote">
             
-              <b>sign_vote</b>(message, voter_id)
+              <b>sign_vote</b>(message, voter_id, key = nil, iv = nil)
             
             <a href="../classes/DataSigner.html#method-i-sign_vote" name="method-i-sign_vote" class="permalink">Link</a>
           </div>
@@ -240,9 +253,9 @@
                 
               </p>
               <div id="method-i-sign_vote_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 36</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sign_vote</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">voter_id</span>)
-  <span class="ruby-identifier">encrypted_msg</span>, <span class="ruby-identifier">msg_key</span>, <span class="ruby-identifier">iv</span> = <span class="ruby-ivar">@encryptor</span>.<span class="ruby-identifier">encrypt</span>(<span class="ruby-identifier">message</span>.<span class="ruby-identifier">to_json</span>)
+                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sign_vote</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">voter_id</span>, <span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">iv</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">encrypted_msg</span>, <span class="ruby-identifier">msg_key</span>, <span class="ruby-identifier">iv</span> = <span class="ruby-ivar">@encryptor</span>.<span class="ruby-identifier">encrypt</span>(<span class="ruby-identifier">message</span>.<span class="ruby-identifier">to_json</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">iv</span>)
   <span class="ruby-identifier">encoded_encrypted_msg</span> = <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">encrypted_msg</span>)
   <span class="ruby-identifier">blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">r</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">blind</span>(<span class="ruby-identifier">encoded_encrypted_msg</span>, <span class="ruby-identifier">admin_key</span>)
   <span class="ruby-identifier">voter_signed_blinded_encoded_encrypted_msg</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">_sign</span>(<span class="ruby-identifier">blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">voter_key</span>)
@@ -253,22 +266,21 @@
     <span class="ruby-identifier">voter_signed_blinded_encoded_encrypted_msg</span>,
     <span class="ruby-identifier">voter_key</span>.<span class="ruby-identifier">public_key</span>.<span class="ruby-identifier">to_s</span>)
 
-  <span class="ruby-identifier">raise</span> <span class="ruby-constant">AdminSignatureError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">admin_response</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">admin_response</span>[<span class="ruby-string">&#39;error&#39;</span>]
 
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">AdminSignatureError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">admin_response</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">admin_response</span>[<span class="ruby-string">&#39;error&#39;</span>]
 
   <span class="ruby-identifier">admin_signed_blinded_encoded_encrypted_msg</span> = <span class="ruby-identifier">admin_response</span>[<span class="ruby-string">&#39;data&#39;</span>][<span class="ruby-string">&#39;admin_signature&#39;</span>]
   <span class="ruby-identifier">admin_signed_encoded_encrypted_msg</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">unblind</span>(<span class="ruby-identifier">admin_signed_blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">admin_key</span>)
-  <span class="ruby-identifier">msg_int</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">text_to_int</span>(<span class="ruby-identifier">encoded_encrypted_msg</span>)
 
-  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\nVERYFING : #{msg_int}&quot;</span>
+  <span class="ruby-identifier">msg_int</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">text_to_int</span>(<span class="ruby-identifier">encoded_encrypted_msg</span>)
 
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">verify</span>(<span class="ruby-value">signed:</span> <span class="ruby-identifier">admin_signed_encoded_encrypted_msg</span>, <span class="ruby-value">message:</span> <span class="ruby-identifier">msg_int</span>, <span class="ruby-value">key:</span> <span class="ruby-identifier">admin_key</span>)
     <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;\n UNBLINDED SINGED IS VERIFIED!\n&quot;</span>
   <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;unblinded signature invalid&quot;</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">AdminSignatureError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;unblinded signature invalid&quot;</span>)
   <span class="ruby-keyword">end</span>
 
-  <span class="ruby-constant">DataSignerResult</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">msg_int</span>, <span class="ruby-identifier">blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">admin_signed_blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">voter_key</span>, <span class="ruby-identifier">msg_key</span>, <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">iv</span>))
+  <span class="ruby-constant">DataSignerResult</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">msg_int</span>, <span class="ruby-identifier">blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">admin_signed_blinded_encoded_encrypted_msg</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">voter_key</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">msg_key</span>, <span class="ruby-constant">Base64</span>.<span class="ruby-identifier">encode64</span>(<span class="ruby-identifier">iv</span>))
 <span class="ruby-keyword">end</span></pre>
               </div>
             </div>
@@ -313,7 +325,7 @@
                 
               </p>
               <div id="method-i-unblind_message_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 74</span>
+                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unblind_message</span>(<span class="ruby-identifier">signed_message</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">signing_key</span> = <span class="ruby-identifier">admin_key</span>)
   <span class="ruby-identifier">unblinded_signed_message</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">unblind</span>(<span class="ruby-identifier">signed_message</span>, <span class="ruby-identifier">r</span>, <span class="ruby-identifier">signing_key</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -360,7 +372,7 @@
                 
               </p>
               <div id="method-i-verify_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 86</span>
+                <pre><span class="ruby-comment"># File app/services/data_signer.rb, line 87</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">verify</span>(<span class="ruby-identifier">signed_message</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">signing_key</span> = <span class="ruby-identifier">admin_key</span>)
   <span class="ruby-identifier">msg_int</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">text_to_int</span>(<span class="ruby-identifier">message</span>)
   <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">verify</span>(<span class="ruby-value">signed:</span> <span class="ruby-identifier">signed_message</span>, <span class="ruby-value">message:</span> <span class="ruby-identifier">msg_int</span>, <span class="ruby-value">key:</span> <span class="ruby-identifier">signing_key</span>)

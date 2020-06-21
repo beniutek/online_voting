@@ -1,0 +1,21 @@
+= README
+
+Counter module is responsible for counting and presenting the votes to all voters
+
+== Building the project
+
+
+  $ git pull
+  $ bundle install
+
+
+== Running the project
+
+  $ rails server
+
+
+== Enviromental variables
+list of env vars that have to be set before starting the project
+
+Admin private key which is used to sign the votes
+  ADMINISTRATOR_MODULE_URI

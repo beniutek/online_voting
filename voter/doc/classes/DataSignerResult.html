@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>DataSignerResult</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
@@ -135,13 +133,12 @@
                 <pre><span class="ruby-comment"># File app/services/data_signer_result.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_h</span>
   {
-    <span class="ruby-value">bit_commitment:</span> <span class="ruby-identifier">bit_commitment</span>,
-    <span class="ruby-value">blinded_message:</span> <span class="ruby-identifier">blinded_message</span>,
-    <span class="ruby-value">blinded_signed_message:</span> <span class="ruby-identifier">blinded_signed_message</span>,
-    <span class="ruby-value">r:</span> <span class="ruby-identifier">r</span>,
-    <span class="ruby-value">voter_signature_key:</span> <span class="ruby-identifier">voter_signature_key</span>,
-    <span class="ruby-value">bit_commitment_key:</span> <span class="ruby-identifier">bit_commitment_key</span>,
-    <span class="ruby-value">bit_commitment_iv:</span> <span class="ruby-identifier">bit_commitment_iv</span>,
+    <span class="ruby-value">bit_commitment:</span> <span class="ruby-identifier">bit_commitment</span>.<span class="ruby-identifier">to_s</span>,
+    <span class="ruby-value">blinded_signed_message:</span> <span class="ruby-identifier">blinded_signed_message</span>.<span class="ruby-identifier">to_s</span>,
+    <span class="ruby-value">r:</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">to_s</span>,
+    <span class="ruby-value">voter_signature_key:</span> <span class="ruby-identifier">voter_signature_key</span>.<span class="ruby-identifier">to_s</span>,
+    <span class="ruby-value">bit_commitment_key:</span> <span class="ruby-identifier">bit_commitment_key</span>.<span class="ruby-identifier">to_s</span>,
+    <span class="ruby-value">bit_commitment_iv:</span> <span class="ruby-identifier">bit_commitment_iv</span>.<span class="ruby-identifier">to_s</span>,
   }
 <span class="ruby-keyword">end</span></pre>
               </div>
@@ -177,7 +174,7 @@
                 
               </p>
               <div id="method-i-to_s_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/data_signer_result.rb, line 22</span>
+                <pre><span class="ruby-comment"># File app/services/data_signer_result.rb, line 21</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">to_s</span>
   <span class="ruby-identifier">to_h</span>.<span class="ruby-identifier">to_s</span>
 <span class="ruby-keyword">end</span></pre>

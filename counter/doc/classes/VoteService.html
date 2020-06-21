@@ -1,10 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>VoteService</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
     <link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="../css/github.css" type="text/css" media="screen" />
@@ -36,7 +34,7 @@
             
                 <span class="parent">&lt;
                     
-                    <a href="Object.html">Object</a>
+                    Object
                     
                 </span>
             
@@ -225,7 +223,7 @@
                 
               </p>
               <div id="method-i-all_accounted_for_votes_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 69</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">all_accounted_for_votes</span>
   <span class="ruby-identifier">admin_repsonse</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">client</span>.<span class="ruby-identifier">admin_voters_list</span>)
   <span class="ruby-identifier">admin_registered_votes</span> = <span class="ruby-identifier">admin_response</span>[<span class="ruby-string">&quot;data&quot;</span>].<span class="ruby-identifier">size</span>
@@ -269,7 +267,7 @@
                 
               </p>
               <div id="method-i-client_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 80</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">client</span>
   <span class="ruby-ivar">@client</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">AdminClient</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
@@ -313,7 +311,7 @@
                 
               </p>
               <div id="method-i-count_vote_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 12</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">count_vote</span>(<span class="ruby-value">signature:</span>, <span class="ruby-value">message:</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">should_be_counted?</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">signature</span>)
     <span class="ruby-identifier">text_msg</span> = <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">int_to_text</span>(<span class="ruby-identifier">message</span>.<span class="ruby-identifier">to_i</span>)
@@ -356,7 +354,7 @@
                 
               </p>
               <div id="method-i-has_correct_signature-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 65</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">has_correct_signature?</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">signature</span>)
   <span class="ruby-identifier">rsa</span>.<span class="ruby-identifier">verify</span>(<span class="ruby-value">signed:</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-value">message:</span> <span class="ruby-identifier">message</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-value">key:</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">config</span>.<span class="ruby-identifier">counter</span>.<span class="ruby-identifier">admin_public_key</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -403,11 +401,11 @@
                 
               </p>
               <div id="method-i-open_vote_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 30</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">open_vote</span>(<span class="ruby-identifier">uuid</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">iv</span>)
-  <span class="ruby-identifier">response</span> = <span class="ruby-identifier">client</span>.<span class="ruby-identifier">get_election_info</span>
+  <span class="ruby-comment"># response = client.get_election_info</span>
 
-  <span class="ruby-identifier">raise</span> <span class="ruby-constant">AdminPhaseInProgressError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;elections&#39;</span>][<span class="ruby-string">&#39;end&#39;</span>].<span class="ruby-identifier">to_datetime</span> <span class="ruby-operator">&gt;</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+  <span class="ruby-comment"># raise AdminPhaseInProgressError if response[&#39;elections&#39;][&#39;end&#39;].to_datetime &gt; Time.now</span>
 
   <span class="ruby-identifier">vote</span> = <span class="ruby-constant">Vote</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-value">uuid:</span> <span class="ruby-identifier">uuid</span>)
 
@@ -462,7 +460,7 @@
                 
               </p>
               <div id="method-i-rsa_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 84</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 85</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rsa</span>
   <span class="ruby-ivar">@rsa</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">OnlineVoting</span><span class="ruby-operator">::</span><span class="ruby-constant">RSABlindSigner</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
@@ -499,7 +497,7 @@
                 
               </p>
               <div id="method-i-should_be_counted-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 56</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">should_be_counted?</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">signature</span>)
   <span class="ruby-identifier">has_correct_signature?</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">signature</span>) <span class="ruby-operator">&amp;&amp;</span>
   <span class="ruby-identifier">voting_first_time?</span>(<span class="ruby-identifier">message</span>, <span class="ruby-identifier">signature</span>)
@@ -537,7 +535,7 @@
                 
               </p>
               <div id="method-i-voting_first_time-3F_source" class="dyn-source">
-                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 61</span>
+                <pre><span class="ruby-comment"># File app/services/vote_service.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">voting_first_time?</span>(<span class="ruby-identifier">bit_commitment</span>, <span class="ruby-identifier">signed_message</span>)
   <span class="ruby-constant">Vote</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">bit_commitment:</span> <span class="ruby-identifier">bit_commitment</span>).<span class="ruby-identifier">or</span>(<span class="ruby-constant">Vote</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">signed_message:</span> <span class="ruby-identifier">signed_message</span>)).<span class="ruby-identifier">empty?</span>
 <span class="ruby-keyword">end</span></pre>

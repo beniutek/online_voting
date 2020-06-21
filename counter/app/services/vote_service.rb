@@ -2,6 +2,7 @@
   This class is responsible for opening and counting votes send by the voter
   Each vote should be signed by the administrator module
 =end
+
 class VoteService
   #
   # == Parameters:

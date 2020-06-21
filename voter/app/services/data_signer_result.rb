@@ -10,7 +10,6 @@ class DataSignerResult < Struct.new(
   def to_h
     {
       bit_commitment: bit_commitment.to_s,
-      blinded_message: blinded_message.to_s,
       blinded_signed_message: blinded_signed_message.to_s,
       r: r.to_s,
       voter_signature_key: voter_signature_key.to_s,

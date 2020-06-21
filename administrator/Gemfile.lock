@@ -150,6 +150,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rdoc (6.2.1)
     rspec-core (3.9.1)
       rspec-support (~> 3.9.1)
     rspec-expectations (3.9.1)
@@ -178,6 +179,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    sdoc (1.1.0)
+      rdoc (>= 5.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -227,8 +230,10 @@ DEPENDENCIES
   puma (~> 4.1)
   rack-cors
   rails (~> 6.0.2, >= 6.0.2.2)
+  rdoc
   rspec-rails
   sass-rails (>= 6)
+  sdoc
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

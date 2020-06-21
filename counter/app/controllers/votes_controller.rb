@@ -1,3 +1,9 @@
+=begin
+ Votes controller is responsible for handling requests made to /votes
+ Full API documentation can be found on:
+ == {apiary}[https://counter4.docs.apiary.io/]
+=end
+
 class VotesController < ApiController
   def index
     render json: vote_service.all_votes.map { |x| VoteSerializer.new(x).to_h }
