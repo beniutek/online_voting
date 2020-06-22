@@ -1,5 +1,6 @@
 require 'rest_client'
-
+#
+# this class is responsble for easy and effortless communication with Administrator module
 module OnlineVoting
   PUBLIC_KEY_URI = 'http://localhost:3030/public-key'
   ELECTION_INFO_URI = 'http://localhost:3030/election-info'

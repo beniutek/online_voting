@@ -1,11 +1,23 @@
 require 'openssl'
 
 module OnlineVoting
+  # this classs is responsible for signing and blinding data
+  # currently it makes use of RSA standard but that can be replaced in the future
+  # current blinding algoritm is a bit clunky and needs some love
   class RSABlindSigner
     def sign(message:, key:)
       _sign(message, key)
     end
 
+    #
+    # == Parameters:
+    # message::
+    #  Must be a string
+    # key::
+    #  object that can respond to encrypt method
+    #  Encryptor is responsible for encrypting the candidate info and is used to generate the bit commitment that user has made
+    # signer::
+    #  signer is an object responsible for blinding, signing and unblinding already signed messages
     def blind_sign(message:, key:)
       digest = OpenSSL::Digest::SHA224.hexdigest(message)
 
