@@ -41,7 +41,7 @@ and appropriate docs will be generated
 
 
 #### API documentation
-* [Counter](lhttps://counter4.docs.apiary.io/l)
+* [Counter](https://counter4.docs.apiary.io/l)
 * [Administrator](https://admin58.docs.apiary.io/)
 * [Voter](https://voterprojectpi.docs.apiary.io/)
 
