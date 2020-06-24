@@ -1,0 +1,3 @@
+= README
+
+Lib is responsible for maintaining shared code between the Voter, Counter and Adminitrator modules.

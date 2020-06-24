@@ -34,11 +34,10 @@ $ rake rdoc
 and appropriate docs will be generated
 
 #### Code documentation:
-* [Voter module documentation](voter/doc/index.html)
-* [Administrator module documentation](administrator/doc/index.html)
-* [Counter module documentation](counter/doc/index.html)
-* [Lib documentation](lib/doc/index.html)
-
+* [Voter module documentation](https://beniutek.github.io/online_voting/voter/doc/index.html)
+* [Administrator module documentation](https://beniutek.github.io/online_voting/administrator/doc/index.html)
+* [Counter module documentation](https://beniutek.github.io/online_voting/counter/doc/index.html)
+* [Lib documentation](https://beniutek.github.io/online_voting/lib/doc/index.html)
 
 #### API documentation
 * [Counter](https://counter4.docs.apiary.io/l)
