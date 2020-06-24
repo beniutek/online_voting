@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DataSigner, skip: true do
+RSpec.describe DataSigner do
   before do
     allow(mock_client).to receive(:new).and_return(mock_client_instance)
   end

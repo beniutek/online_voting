@@ -47,14 +47,9 @@ class DataSigner
     raise AdminSignatureError if admin_response.to_s == "" || admin_response['error']
 
     admin_signed_blinded_encoded_encrypted_msg = admin_response['data']['admin_signature']
-    admin_signed_encoded_encrypted_msg = rsa.unblind(admin_signed_blinded_encoded_encrypted_msg, r, admin_key)
 
-    msg_int = rsa.text_to_int(encoded_encrypted_msg)
-
-    if rsa.verify(signed: admin_signed_encoded_encrypted_msg, message: msg_int, key: admin_key)
-      puts "\n UNBLINDED SINGED IS VERIFIED!\n"
-    else
-      raise AdminSignatureError.new("unblinded signature invalid")
+    if !rsa.verify(signed: admin_signed_blinded_encoded_encrypted_msg, message: blinded_encoded_encrypted_msg, key: admin_key)
+      raise AdminSignatureError.new("admin signature invalid")
     end
 
     DataSignerResult.new(msg_int, blinded_encoded_encrypted_msg, admin_signed_blinded_encoded_encrypted_msg, r, voter_key.to_s, msg_key, Base64.encode64(iv))
