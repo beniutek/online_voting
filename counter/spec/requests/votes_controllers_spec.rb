@@ -70,6 +70,7 @@ RSpec.describe "VotesControllers", type: :request do
 
   describe "GET /votes" do
     before do
+      allow_any_instance_of(OnlineVoting::AdminClient).to receive(:get_election_info).and_return({ "elections" => { "admin_phase" => false } })
       allow_any_instance_of(VoteService).to receive(:all_votes).and_return(all_votes)
       get votes_path, headers: headers
     end
