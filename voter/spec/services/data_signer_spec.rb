@@ -31,12 +31,9 @@ RSpec.describe DataSigner do
       allow(mock_client_instance).to receive(:get_admin_signature).and_return(admin_response)
     end
 
-    context "admin returns correctly signed message" do
-      it "returns a proper data signer result object" do
-        result = data_signer.sign_vote(message, voter_id, bc_key, bc_iv)
-        result.each do |key, val|
-          expect(key).to be_truthy
-        end
+    context "admin signature is incorrect" do
+      it "returns an error object" do
+        expect { data_signer.sign_vote(message, voter_id, bc_key, bc_iv) }.to raise_error(DataSigner::AdminSignatureError)
       end
     end
   end
