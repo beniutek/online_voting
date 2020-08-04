@@ -5,8 +5,6 @@ simple implementation of a safe and anynomous voting system
 based on [**"A practical Secret Voting Scheme for Large Scale Elections"**](https://link.springer.com/chapter/10.1007/3-540-57220-1_66)
 by Atsushi Fujioka, Tatsuaki Okamoto and Kazuo Ohta
 
-Project is just an API service with no real frontend, [Voters Frontend Project](https://github.com/merynos94/voters) is an atempt to solve this.
-
 
 #### How it works:
 
