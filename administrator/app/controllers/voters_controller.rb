@@ -5,10 +5,10 @@
 =end
 class VotersController < ApplicationController
   def index
-    if admin_phase_finished?
-      render json: Voter.has_voted.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
-    else
+    if admin_phase?
       render json: { error: "admin phase is not finished yet "}, status: 400
+    else
+      render json: Voter.has_voted.map { |x| { id: x.voter_id, message: x.data, signature: x.signature } }
     end
   end
 

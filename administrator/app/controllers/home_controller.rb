@@ -20,7 +20,7 @@ class HomeController < ApplicationController
   def phase
     render json: {
       elections: {
-        admin_phase: admin_phase_finished?
+        admin_phase: admin_phase?
       }
     }
   end

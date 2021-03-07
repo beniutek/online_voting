@@ -30,7 +30,7 @@ class VoteService
   def open_vote(uuid, key, iv)
     # response = client.get_election_info
     # raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
-binding.pry
+
     vote = Vote.find_by(uuid: uuid)
 
     decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)

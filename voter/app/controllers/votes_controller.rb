@@ -30,6 +30,16 @@ class VotesController < ApplicationController
     render json: { error: e.message }, status: 400
   end
 
+  def open
+    counter_response = CounterClient.new.open_vote(params[:data][:vote_index], params[:data][:bit_commitment_key], params[:data][:bit_commitment_iv])
+
+    if counter_response.empty? || counter_response['error']
+      render json: { error: "counter couldn't open your vote", details: counter_response }, status: 400
+    else
+      render json: { data: { description: 'vote succefully opened' } }, status: 200
+    end
+  end
+
   private
 
   def vote

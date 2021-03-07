@@ -51,9 +51,6 @@ class VoteSigner
   private
 
   def validate!
-
-    binding.pry
-
     raise SignatureValidationError if !data_valid?(@data, @signature, @pkey)
     raise ForbiddenToVoteError if @voter.nil? || !allowed_to_vote?
   end
