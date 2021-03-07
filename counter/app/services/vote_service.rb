@@ -53,7 +53,6 @@ class VoteService
   end
 
   def should_be_counted?(message, signature)
-
     has_correct_signature?(message, signature) &&
     voting_first_time?(message, signature)
   end
