@@ -39,7 +39,7 @@ class VoteSigner
       signed_vote_at: Time.now
     )
 
-    @rsa.sign(message: @data.to_i, key: admin_key)
+    @rsa.sign(message: @data.to_i, key: @admin_key)
   end
 
   class SignatureValidationError < StandardError
@@ -51,6 +51,9 @@ class VoteSigner
   private
 
   def validate!
+
+    binding.pry
+
     raise SignatureValidationError if !data_valid?(@data, @signature, @pkey)
     raise ForbiddenToVoteError if @voter.nil? || !allowed_to_vote?
   end
