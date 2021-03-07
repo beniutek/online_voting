@@ -2,83 +2,86 @@ require 'openssl'
 
 module OnlineVoting
   # this classs is responsible for signing and blinding data
-  # currently it makes use of RSA standard but that can be replaced in the future
-  # current blinding algoritm is a bit clunky and needs some love
+  # currently it makes use of RSA standard but it should be replaced in the future
   class RSABlindSigner
-    def sign(message:, key:)
-      _sign(message, key)
+    def initialize(key)
+      @key = key
+      @n = key.params['n']
+      @e = key.params['e']
+      @d = key.params['d']
     end
 
-    #
+    # == Parameters:
+    # msg::
+    #  Integer. Message to be signed
+    # == Returns:
+    # Integer. Signed message
+    def sign(msg)
+      msg.to_bn.mod_exp(@d, @n) % @n
+    end
+
+
     # == Parameters:
     # message::
-    #  Must be a string
-    # key::
-    #  object that can respond to encrypt method
-    #  Encryptor is responsible for encrypting the candidate info and is used to generate the bit commitment that user has made
-    # signer::
-    #  signer is an object responsible for blinding, signing and unblinding already signed messages
-    def blind_sign(message:, key:)
+    #  String. Message to be blinded and signed
+    # == Returns:
+    # Array of 2 integers. First one is blinded message, the second is blinded signed message
+    def blind_sign(message:)
       digest = OpenSSL::Digest::SHA224.hexdigest(message)
 
-      # m' = mr^e (mod n)
-      msg_int_blinded, r = blind(digest, key)
-      msg_int_blinded_signed = _sign(msg_int_blinded, key)
-      msg_int = text_to_int(digest)
-      msg_int_signed = _sign(msg_int, key)
+      msg_blinded = blind(digest)
+      msg_int_blinded_signed = sign(msg_blinded)
 
-      [
-        msg_int_blinded,
-        msg_int_blinded_signed,
-        r
-      ]
+      [msg_int_blinded, msg_int_blinded_signed]
     end
 
-    def verify(signed:, message:, key:)
-      _verify(signed, message, key)
+
+    # == Parameters:
+    # signed::
+    #  Integer. Signder messsage
+    # message::
+    #  Integer. Message to be verified
+    # == Returns:
+    # Boolean. True or false depending on whether the message is verified
+    def verify(signed:, message:)
+      message == (signed.to_bn.mod_exp(@e, @n) % @n)
     end
 
-    def blind(msg, key)
-      r = blinding_factor(key)
-      msg_int = text_to_int(msg)
-      # m' = mr^e (mod n)
-      msg_int_blinded = msg_int * r.to_bn.mod_exp(key.params['e'], key.params['n']) % key.params['n']
-      return msg_int_blinded, r
+    def blind(msg, blinding_factor)
+      msg_int = str_to_int(msg)
+
+      msg_int * blinding_factor.to_bn.mod_exp(@e, @n) % @n
     end
 
-    def blinding_factor(key)
-      n = key.params['n'].to_i
-      r = (rand*(n-1)).to_i
-      # greatest common divisor
-      r += 1 while r.gcd(n) !=1
+    # blinding factor is a relatively prime to @n (public modulus of the RSA signature)
+    def generate_blinding_factor
+      n = @n.to_i
+
+      r = (rand * (n - 1)).to_i
+      r += 1 while r.gcd(n) != 1
+
       r
     end
 
-    def text_to_int(text)
-      bitmap = '1'+text.unpack('B*')[0]
-      bitmap.to_i(2)
+    def unblind(msg, blinding_factor)
+      msg * blinding_factor.to_bn.mod_inverse(@n) % @n
     end
 
-    def int_to_text(int)
-      bitmap = int.to_i.to_s(2)
-      [bitmap.sub(/^1/, '')].pack('B*')
+
+    def str_to_int(str)
+      self.class.str_to_int(str)
     end
 
-    def unblind(blinded_msg, r, key)
-      # sm = sm' * r^-1 (mod n)
-      msg = blinded_msg * r.to_bn.mod_inverse(key.params['n']) % key.params['n']
-      msg
+    def int_to_str(int)
+      self.class.int_to_str(int)
     end
 
-    def _sign(msg, key)
-      # sm = m^d (mod n)
-      msg.to_bn.mod_exp(key.params['d'], key.params['n']) % key.params['n']
+    def self.int_to_str(int)
+      [int.to_s(2).sub(/^1/, '')].pack('B*')
     end
 
-    def _verify(msg_signed, msg, key)
-      # sm'^e (mod n) == m'
-      verify_res = msg_signed.to_bn.mod_exp(key.params['e'], key.params['n']) % key.params['n']
-      matches = verify_res == msg
+    def self.str_to_int(str)
+      ('1' + str.unpack('B*')[0]).to_i(2)
     end
   end
 end

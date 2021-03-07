@@ -27,6 +27,7 @@ class VotesController < ApplicationController
   rescue DataSigner::AdminSignatureError => e
     render json: { error: "admin signature could not be obtained" }, status: 400
   rescue StandardError => e
+    e.backtrace.each do |l| pp l end
     render json: { error: e.message }, status: 400
   end
 

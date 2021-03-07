@@ -15,6 +15,7 @@ require "action_cable/engine"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 require_relative "../../lib/online_voting/rsa_blind_signer.rb"
+
 Dir[
   File.expand_path("lib/administrator.rb"),
 ].each do |file|

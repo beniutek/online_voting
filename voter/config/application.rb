@@ -17,7 +17,7 @@ require "action_cable/engine"
 require_relative "../../lib/online_voting/rsa_blind_signer.rb"
 require_relative "../../lib/online_voting/admin_client.rb"
 require_relative "../../lib/online_voting/crypto/message.rb"
-require_relative "../../lib/online_voting/crypto/blind_signer.rb"
+
 Dir[
   File.expand_path("lib/voter.rb"),
 ].each do |file|

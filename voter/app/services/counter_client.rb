@@ -3,6 +3,8 @@
 =end
 
 class CounterClient
+  class CounterClientError < StandardError
+  end
   #
   # == Parameters:
   # client::
@@ -35,8 +37,6 @@ class CounterClient
     response = @client.post(@uri, values, headers)
 
     JSON.parse(response.body)
-  rescue StandardError => e
-    raise CounterClientError(e.message)
   end
 
   def open_vote(vote_index, bit_commitment_key, bit_commitment_iv)
@@ -52,10 +52,5 @@ class CounterClient
     response = @client.post(uri, values, headers)
 
     JSON.parse(response.body)
-  rescue StandardError => e
-    raise CounterClientError(e.message)
-  end
-
-  class CounterClientError < StandardError
   end
 end
