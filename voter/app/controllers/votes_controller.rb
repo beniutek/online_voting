@@ -16,20 +16,17 @@ class VotesController < ApplicationController
         render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
       else
         render json: {
-          data: result.to_h.merge(unblinded_message_signed_by_admin: unblinded_signed_message.to_s, vote_index: counter_response["index"])
+          data: result.to_h.merge(vote_index: counter_response["index"])
         }, status: 200
       end
     else
       render json: { error: 'empty params' }, status: :bad_request
     end
   rescue CounterClient::CounterClientError => e
-    puts "Exception: #{e.message}"
     render json: { error: "counter returned a bad response" }, status: 400
   rescue DataSigner::AdminSignatureError => e
-    puts "Exception: #{e.message}"
     render json: { error: "admin signature could not be obtained" }, status: 400
   rescue StandardError => e
-    puts "Exception: #{e.message}"
     render json: { error: e.message }, status: 400
   end
 
