@@ -7,14 +7,14 @@ ActiveAdmin.register Configuration do
     selectable_column
     id_column
     column :name
-    column :data
+    column :active
     actions
   end
 
   form do |f|
     f.inputs do
       f.input :name
-      f.input :data, as: :json
+      f.input :active
     end
     f.actions
   end

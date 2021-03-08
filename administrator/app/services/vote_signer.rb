@@ -46,14 +46,22 @@ class VoteSigner
   class SignatureValidationError < StandardError
   end
 
+  class VoterKeyInvalidError < StandardError
+  end
+
   class ForbiddenToVoteError < StandardError
   end
 
   private
 
   def validate!
+    raise VoterKeyInvalidError if public_key_incorrect?
     raise SignatureValidationError if !data_valid?(@data, @signature, @pkey)
     raise ForbiddenToVoteError if @voter.nil? || !allowed_to_vote?
+  end
+
+  def public_key_incorrect?
+    @voter.public_key == @pkey
   end
 
   def allowed_to_vote?
