@@ -8,17 +8,7 @@ class VotesController < ApplicationController
   def sign
     if message && voter_id
       result = data_signer.sign_vote(message, voter_id)
-      unblinded_signed_message = data_signer.unblind_message(result.blinded_signed_message, result.r)
-
-      counter_response = CounterClient.new.send_vote(unblinded_signed_message, result.bit_commitment)
-
-      if counter_response.empty? || counter_response['error']
-        render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
-      else
-        render json: {
-          data: result.to_h.merge(vote_index: counter_response["index"])
-        }, status: 200
-      end
+      render json: { data: result.to_h }
     else
       render json: { error: 'empty params' }, status: :bad_request
     end
@@ -27,7 +17,29 @@ class VotesController < ApplicationController
   rescue DataSigner::AdminSignatureError => e
     render json: { error: "admin signature could not be obtained" }, status: 400
   rescue StandardError => e
+    e.backtrace.each do |l| pp l end
     render json: { error: e.message }, status: 400
+  end
+
+  def cast
+    unblinded_signed_message = data_signer.unblind_message(params[:data][:blinded_signed_message].to_i, params[:data][:r].to_i)
+    counter_response = CounterClient.new.send_vote(unblinded_signed_message, params[:data][:bit_commitment])
+
+    if counter_response.empty? || counter_response['error']
+      render json: { error: "counter couldn't register your vote", details: counter_response }, status: 400
+    else
+      render json: { data: counter_response }, status: 200
+    end
+  end
+
+  def open
+    counter_response = CounterClient.new.open_vote(params[:data][:vote_index], params[:data][:bit_commitment_key], params[:data][:bit_commitment_iv])
+
+    if counter_response.empty? || counter_response['error']
+      render json: { error: "counter couldn't open your vote", details: counter_response }, status: 400
+    else
+      render json: { data: { description: 'vote succefully opened' } }, status: 200
+    end
   end
 
   private

@@ -18,12 +18,12 @@ class VoteSigner
   #  String. This is voter unique identificator
   # == Returns:
   # a new VoteSigner instance
-  def initialize(data:, signature:, public_key:, voter_id:)
+  def initialize(data:, signature:, public_key:, voter_id:, signer: OnlineVoting::RSABlindSigner)
     @data = data
     @pkey = public_key
     @signature = signature
     @voter = Voter.find_by(voter_id: voter_id)
-    @rsa ||= OnlineVoting::RSABlindSigner.new
+    @signer = signer
     @admin_key ||= OpenSSL::PKey.read(Administrator.config.online_voting_secret)
   end
 
@@ -39,10 +39,14 @@ class VoteSigner
       signed_vote_at: Time.now
     )
 
-    @rsa.sign(message: @data.to_i, key: admin_key)
+    signer = @signer.new(@admin_key)
+    signer.sign(@data.to_i)
   end
 
   class SignatureValidationError < StandardError
+  end
+
+  class VoterKeyInvalidError < StandardError
   end
 
   class ForbiddenToVoteError < StandardError
@@ -51,8 +55,13 @@ class VoteSigner
   private
 
   def validate!
+    raise VoterKeyInvalidError if public_key_incorrect?
     raise SignatureValidationError if !data_valid?(@data, @signature, @pkey)
     raise ForbiddenToVoteError if @voter.nil? || !allowed_to_vote?
+  end
+
+  def public_key_incorrect?
+    @voter.public_key == @pkey
   end
 
   def allowed_to_vote?
@@ -61,6 +70,7 @@ class VoteSigner
 
   def data_valid?(data, signature, pkey)
     key = OpenSSL::PKey.read(pkey)
-    @rsa.verify(message: data.to_i, signed: signature.to_i, key: key)
+    signer = @signer.new(key)
+    signer.verify(message: data.to_i, signed: signature.to_i)
   end
 end

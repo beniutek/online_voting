@@ -6,11 +6,15 @@
 
 class VotesController < ApiController
   def index
-    # if admin_phase_finished?
+    if voting_phase["admin_phase"]
+      render json: { error: 'admin phase is not finished yet' }, status: 400
+    elsif voting_phase["casting_phase"]
+      render json: { error: 'casting phase is not finished yet' }, status: 400
+    else
       render json: vote_service.all_votes.map { |x| VoteSerializer.new(x).to_h }
-    # else
-    #   render json: { error: 'admin phase is not finished yet' }, status: 400
-    # end
+    end
+  rescue StandardError => e
+    render json: { error: "Error: Results unavailable" }
   end
 
   def create
@@ -32,7 +36,7 @@ class VotesController < ApiController
 
   def open
     if vote_service.open_vote(params[:id], params[:data][:key], params[:data][:iv])
-      render json: {}, status: 200
+      render json: { data: { description: 'vote opened!'} }, status: 200
     else
       render json: {}, status: 400
     end

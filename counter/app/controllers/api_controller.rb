@@ -1,9 +1,10 @@
 class ApiController < ActionController::API
-  def admin_phase_finished?
+  def voting_phase
+    return @voting_phase if @voting_phase
     response = OnlineVoting::AdminClient.new.get_election_info
-    !response["elections"]["admin_phase"]
+     @voting_phase = response["elections"]
   rescue StandardError => e
     pp e
-    false
+    {}
   end
 end

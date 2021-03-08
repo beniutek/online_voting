@@ -39,6 +39,23 @@ class CounterClient
     raise CounterClientError(e.message)
   end
 
+  def open_vote(vote_index, bit_commitment_key, bit_commitment_iv)
+    values = {
+      data: {
+        id: vote_index,
+        key: bit_commitment_key,
+        iv: bit_commitment_iv.
+      },
+    }
+    uri = "#{@uri}/#{vote_index}/open"
+    headers = {}
+    response = @client.post(uri, values, headers)
+
+    JSON.parse(response.body)
+  rescue StandardError => e
+    raise CounterClientError(e.message)
+  end
+
   class CounterClientError < StandardError
   end
 end

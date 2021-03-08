@@ -19,9 +19,10 @@ class HomeController < ApplicationController
   #
   def phase
     render json: {
-      elections: {
-        admin_phase: admin_phase_finished?
-      }
+      elections: ::Configuration.all.reduce({}) do |acc, config|
+        acc[config.name] = config.active
+        acc
+      end
     }
   end
 end

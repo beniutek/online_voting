@@ -11,7 +11,7 @@ class VoteService
   #  This is the original message
   def count_vote(signature:, message:)
     if should_be_counted?(message, signature)
-      text_msg = rsa.int_to_text(message.to_i)
+      text_msg = OnlineVoting::RSABlindSigner.int_to_str(message.to_i)
       vote = Vote.create!(bit_commitment: text_msg, signed_message: signature)
       [true, vote.reload.uuid]
     else
@@ -28,9 +28,6 @@ class VoteService
   # iv::
   #  This is the initialization vector used to make the bit commitment
   def open_vote(uuid, key, iv)
-    # response = client.get_election_info
-    # raise AdminPhaseInProgressError if response['elections']['end'].to_datetime > Time.now
-
     vote = Vote.find_by(uuid: uuid)
 
     decrypted = OnlineVoting::Crypto::Message.decrypt(vote.bit_commitment, key, iv)
@@ -62,21 +59,11 @@ class VoteService
   end
 
   def has_correct_signature?(message, signature)
-    rsa.verify(signed: signature.to_i, message: message.to_i, key: Rails.application.config.counter.admin_public_key)
+    signer = OnlineVoting::RSABlindSigner.new(Rails.application.config.counter.admin_public_key)
+    signer.verify(signed: signature.to_i, message: message.to_i)
   end
 
   def all_votes
     Vote.all
-  end
-
-  def client
-    @client ||= OnlineVoting::AdminClient.new
-  end
-
-  def rsa
-    @rsa ||= OnlineVoting::RSABlindSigner.new
-  end
-
-  class AdminPhaseInProgressError < StandardError
   end
 end
