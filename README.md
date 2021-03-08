@@ -36,8 +36,10 @@ and appropriate docs will be generated
 ### How to test
 
 We use `rspec` to run tests in eahc of our project. Also we use `simplecov` to document the test coverage.
+
 You can see example output for Counter module [here](https://beniutek.github.io/online_voting/counter/coverage/index.html).
-You can see example output for Voter module [here](https://beniutek.github.io/online_voting/voter/coverage/index.html).
+
+You can see example output for Voter module [here](https://beniutek.github.io/online_voting/voter/coverage/).
 
 #### Code documentation:
 * [Voter module documentation](https://beniutek.github.io/online_voting/voter/doc/index.html)
