@@ -24,9 +24,6 @@ class VotesController < ApiController
           signature: signature_param
         }
       else
-        pp '-------create-----------'
-        pp i
-        pp '------------------------'
         render json: { error: i }, status: 400
       end
     else
