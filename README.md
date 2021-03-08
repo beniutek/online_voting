@@ -5,8 +5,6 @@ simple implementation of a safe and anynomous voting system
 based on [**"A practical Secret Voting Scheme for Large Scale Elections"**](https://link.springer.com/chapter/10.1007/3-540-57220-1_66)
 by Atsushi Fujioka, Tatsuaki Okamoto and Kazuo Ohta
 
-Project is just an API service with no real frontend, [Voters Frontend Project](https://github.com/merynos94/voters) is an atempt to solve this.
-
 
 #### How it works:
 
@@ -36,8 +34,10 @@ and appropriate docs will be generated
 ### How to test
 
 We use `rspec` to run tests in eahc of our project. Also we use `simplecov` to document the test coverage.
+
 You can see example output for Counter module [here](https://beniutek.github.io/online_voting/counter/coverage/index.html).
-You can see example output for Voter module [here](https://beniutek.github.io/online_voting/voter/coverage/index.html).
+
+You can see example output for Voter module [here](https://beniutek.github.io/online_voting/voter/coverage/).
 
 #### Code documentation:
 * [Voter module documentation](https://beniutek.github.io/online_voting/voter/doc/index.html)
